@@ -1,26 +1,29 @@
 import os
 import csv
 from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def get_file_info(file_path):
+    file_size = os.path.getsize(file_path)
+    return (os.path.basename(file_path), file_path, file_size)
 
 def collect_sas7bdat_files_info(root_dir, output_csv):
     file_info_list = []
-    file_count = 0
 
-    # Walk through the directory and count the .sas7bdat files while processing
-    for subdir, _, files in os.walk(root_dir):
+    # Collect all .sas7bdat file paths
+    print("Collecting .sas7bdat file paths...")
+    file_paths = []
+    for subdir, _, files in tqdm(os.walk(root_dir), desc="Scanning directories", unit="dir"):
         for file in files:
             if file.endswith('.sas7bdat'):
-                file_count += 1
+                file_paths.append(os.path.join(subdir, file))
 
-    # Walk through the directory and process the files with progress bar
-    with tqdm(total=file_count, desc="Processing .sas7bdat files", unit="file") as pbar:
-        for subdir, _, files in os.walk(root_dir):
-            for file in files:
-                if file.endswith('.sas7bdat'):
-                    file_path = os.path.join(subdir, file)
-                    file_size = os.path.getsize(file_path)
-                    file_info_list.append((file, file_path, file_size))
-                    pbar.update(1)
+    # Process files in parallel to get their sizes
+    print(f"Found {len(file_paths)} .sas7bdat files. Getting file sizes...")
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(get_file_info, path): path for path in file_paths}
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Processing files", unit="file"):
+            file_info_list.append(future.result())
 
     # Sort the list by file size in descending order
     file_info_list.sort(key=lambda x: x[2], reverse=True)
