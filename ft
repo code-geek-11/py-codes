@@ -1,0 +1,41 @@
+import os
+import csv
+from tqdm import tqdm
+
+def collect_sas7bdat_files_info(root_dir, output_csv):
+    file_info_list = []
+
+    # Walk through the directory and count total files for progress bar
+    total_files = sum([len(files) for _, _, files in os.walk(root_dir)])
+
+    # Walk through the directory
+    with tqdm(total=total_files, desc="Processing files", unit="file") as pbar:
+        for subdir, _, files in os.walk(root_dir):
+            for file in files:
+                pbar.update(1)
+                if file.endswith('.sas7bdat'):
+                    file_path = os.path.join(subdir, file)
+                    file_size = os.path.getsize(file_path)
+                    file_info_list.append((file, file_path, file_size))
+
+    # Sort the list by file size in descending order
+    file_info_list.sort(key=lambda x: x[2], reverse=True)
+
+    # Write the details to a CSV file
+    with open(output_csv, mode='w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(['Name of the file', 'Path', 'Size of the file'])
+
+        for file_info in file_info_list:
+            csvwriter.writerow(file_info)
+
+if __name__ == "__main__":
+    root_directory = input("Enter the root directory to search for .sas7bdat files: ")
+    
+    # Check if the provided root directory is valid
+    if not os.path.isdir(root_directory):
+        print(f"Error: The provided root directory '{root_directory}' is not valid.")
+    else:
+        output_csv_file = input("Enter the output CSV file name (with .csv extension): ")
+        collect_sas7bdat_files_info(root_directory, output_csv_file)
+        print(f"Details of .sas7bdat files have been written to {output_csv_file}")
