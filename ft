@@ -4,19 +4,23 @@ from tqdm import tqdm
 
 def collect_sas7bdat_files_info(root_dir, output_csv):
     file_info_list = []
+    file_count = 0
 
-    # Walk through the directory and count total files for progress bar
-    total_files = sum([len(files) for _, _, files in os.walk(root_dir)])
+    # Walk through the directory and count the .sas7bdat files while processing
+    for subdir, _, files in os.walk(root_dir):
+        for file in files:
+            if file.endswith('.sas7bdat'):
+                file_count += 1
 
-    # Walk through the directory
-    with tqdm(total=total_files, desc="Processing files", unit="file") as pbar:
+    # Walk through the directory and process the files with progress bar
+    with tqdm(total=file_count, desc="Processing .sas7bdat files", unit="file") as pbar:
         for subdir, _, files in os.walk(root_dir):
             for file in files:
-                pbar.update(1)
                 if file.endswith('.sas7bdat'):
                     file_path = os.path.join(subdir, file)
                     file_size = os.path.getsize(file_path)
                     file_info_list.append((file, file_path, file_size))
+                    pbar.update(1)
 
     # Sort the list by file size in descending order
     file_info_list.sort(key=lambda x: x[2], reverse=True)
