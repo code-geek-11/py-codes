@@ -1,0 +1,56 @@
+import os
+import csv
+from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def get_file_info(file_path):
+    file_size = os.path.getsize(file_path)
+    return (os.path.basename(file_path), file_path, file_size)
+
+def bytes_to_mb(bytes_size):
+    return bytes_size / (1024 * 1024)
+
+def bytes_to_gb(bytes_size):
+    return bytes_size / (1024 * 1024 * 1024)
+
+def collect_sas7bdat_files_info(root_dir, output_csv):
+    file_info_list = []
+
+    # Collect all .sas7bdat file paths
+    print("Collecting .sas7bdat file paths...")
+    file_paths = []
+    for subdir, _, files in tqdm(os.walk(root_dir), desc="Scanning directories", unit="dir"):
+        for file in files:
+            if file.endswith('.sas7bdat'):
+                file_paths.append(os.path.join(subdir, file))
+
+    # Process files in parallel to get their sizes
+    print(f"Found {len(file_paths)} .sas7bdat files. Getting file sizes...")
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(get_file_info, path): path for path in file_paths}
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Processing files", unit="file"):
+            file_info = future.result()
+            file_name, file_path, file_size = file_info
+            file_info_list.append(file_info + (bytes_to_mb(file_size), bytes_to_gb(file_size)))
+
+    # Sort the list by file size in descending order
+    file_info_list.sort(key=lambda x: x[2], reverse=True)
+
+    # Write the details to a CSV file
+    with open(output_csv, mode='w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(['Name of the file', 'Path', 'Size (bytes)', 'Size (MB)', 'Size (GB)'])
+
+        for file_info in file_info_list:
+            csvwriter.writerow(file_info)
+
+if __name__ == "__main__":
+    root_directory = input("Enter the root directory to search for .sas7bdat files: ")
+    
+    # Check if the provided root directory is valid
+    if not os.path.isdir(root_directory):
+        print(f"Error: The provided root directory '{root_directory}' is not valid.")
+    else:
+        output_csv_file = input("Enter the output CSV file name (with .csv extension): ")
+        collect_sas7bdat_files_info(root_directory, output_csv_file)
+        print(f"Details of .sas7bdat files have been written to {output_csv_file}")
