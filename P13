@@ -1,0 +1,52 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, explode, lit
+from pyspark.sql.types import StructType, ArrayType
+
+# Initialize Spark Session
+spark = SparkSession.builder.appName("JSON to CSV").getOrCreate()
+
+# Define the path to your JSON file
+json_path = "path/to/your/nested.json"
+
+# Read the JSON file with multiline option set to true
+df = spark.read.option("multiline", "true").json(json_path)
+
+def flatten(df):
+    """
+    Flatten all levels of nested structures and arrays in a DataFrame.
+    """
+    # Initialize list of columns to flatten
+    stack = [((), df)]
+    flat_df = None
+
+    while stack:
+        # Pop the first element from the stack
+        parents, df = stack.pop()
+
+        # Get all struct and array columns
+        struct_cols = [field.name for field in df.schema.fields if isinstance(field.dataType, StructType)]
+        array_cols = [field.name for field in df.schema.fields if isinstance(field.dataType, ArrayType)]
+
+        # Add struct columns to stack
+        for col_name in struct_cols:
+            stack.append((parents + (col_name,), df.selectExpr(f"`{col_name}`.*")))
+
+        # Explode array columns
+        for col_name in array_cols:
+            df = df.withColumn(col_name, explode(col(col_name)))
+
+        # Select and rename all columns
+        columns = [col(f"`{'`'.join(parents + (c,))}`").alias(f"{'.'.join(parents + (c,))}") for c in df.columns]
+        flat_df = df.select(columns) if flat_df is None else flat_df.join(df.select(columns), on=list(parents))
+
+    return flat_df
+
+# Flatten the DataFrame if it has nested columns
+flat_df = flatten(df)
+
+# Write the DataFrame to a CSV file
+output_path = "path/to/output/csv"
+flat_df.write.option("header", "true").csv(output_path, mode='overwrite')
+
+# Stop the Spark Session
+spark.stop()
