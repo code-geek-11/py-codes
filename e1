@@ -1,0 +1,30 @@
+Abstract
+
+This thesis evaluates the existing data integration framework, which is comprised of two distinct architectures centered around SAS and Qlik tools, to determine whether it possesses advanced analytical capabilities. Despite demonstrating robust processes in data extraction, transformation, and visualization, the current framework falls short in delivering essential components of advanced analytics such as predictive modeling, machine learning, and complex statistical analysis.
+Introduction
+
+In today's data-driven world, advanced analytics is critical for businesses aiming to gain insights, make informed decisions, and maintain a competitive edge. This thesis aims to critically assess our current data integration framework to identify and address the gaps in its analytical capabilities. By examining the frameworks centered around SAS and Qlik tools, we will explore the limitations and propose enhancements to meet the demands of advanced analytics.
+Chapter 1: Overview of Current Framework
+
+Our current data integration framework consists of two main architectures. The SAS-centered architecture involves extracting data from IBM DB2 for iSeries and SQL Server, transforming it using the base module of SAS, and then creating reports or feeding the transformed data to visualization tools like Tableau and SAP Business Objects. On the other hand, the Qlik-centered architecture extracts data from IBM DB2 for iSeries and loads it into a SQL Server database known as Data Lakes. From these Data Lakes, Qlik Compose is used to create data warehouses and data marts, which serve as data sources for Tableau visualizations.
+Chapter 2: Analysis of Data Processing Capabilities
+
+Both architectures efficiently extract and load data from multiple sources into structured environments, ensuring data is ready for analysis. The SAS architecture utilizes the base SAS module for basic data manipulation and transformation, while Qlik Compose structures data into warehouses and marts. Visualization tools like Tableau and SAP Business Objects effectively transform this data into visual insights. However, these processes largely focus on data preparation and visualization rather than advanced analytics.
+Chapter 3: Defining Advanced Analytical Capabilities
+
+Advanced analytical capabilities go beyond basic data transformation and visualization. They encompass complex statistical analysis, which involves more than just descriptive statistics, and machine learning and AI for predictive modeling, classification, and clustering. Data mining techniques discover hidden patterns and relationships within datasets, while optimization and simulation apply advanced mathematical techniques for scenario analysis. Additionally, big data processing handles and analyzes large datasets efficiently using platforms like Hadoop and Spark.
+Chapter 4: Gaps in Current Framework
+
+The current SAS-centered architecture is limited to basic data transformations and reporting, without integrating advanced statistical modules or machine learning capabilities. It lacks tools for predictive analytics, which are essential for modern data-driven decision-making. Similarly, the Qlik-centered architecture focuses primarily on data integration and warehousing, with no provisions for advanced analytics like machine learning or AI. The reliance on Tableau for visualization limits the depth of analytical insights that can be derived from the data.
+Chapter 5: Comparative Analysis with Advanced Analytical Frameworks
+
+When compared with advanced analytical frameworks, our current setup reveals significant gaps. Advanced frameworks integrate tools like R, Python, and AI/ML platforms that enable sophisticated analyses. These frameworks utilize big data technologies like Hadoop and Spark for processing extensive datasets and incorporate BI tools with integrated analytical capabilities, such as Power BI with R/Python integration, enhancing the depth and breadth of analytics.
+Chapter 6: Recommendations for Enhancing Analytical Capabilities
+
+To bridge these gaps, we recommend integrating machine learning and AI tools, such as SAS Viya, Python (with libraries like scikit-learn and TensorFlow), and R. Implementing these tools will introduce predictive and prescriptive analytics to our framework. Additionally, leveraging advanced statistical modules in SAS and promoting complex analytical techniques, such as time series analysis and multivariate analysis, will significantly enhance our capabilities. Adopting big data platforms and distributed computing frameworks like Hadoop and Spark will enable efficient processing of larger datasets. Finally, investing in training for our data scientists and analysts will ensure they are equipped with the latest skills and knowledge to utilize these advanced tools effectively.
+Conclusion
+
+In summary, the current framework, while robust in data extraction, transformation, and visualization, lacks the advanced analytical capabilities necessary for deeper insights and strategic decision-making. Integrating advanced analytics is essential for our organization to stay competitive and make data-driven decisions. By enhancing our framework with machine learning, AI, advanced statistical analysis, and big data technologies, we can achieve a comprehensive analytical framework that meets the demands of modern business environments.
+References
+
+This section will include academic and industry sources on data analytics, machine learning, and business intelligence, as well as documentation and user guides for SAS, Qlik Compose, Qlik Replicate, Tableau, and SAP Business Objects.
