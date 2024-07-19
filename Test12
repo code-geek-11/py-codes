@@ -1,0 +1,30 @@
+import pandas as pd
+
+# Load the Excel file
+file_path = 'your_excel_file.xlsx'
+df = pd.read_excel(file_path)
+
+# Function to find the longest data entry in a given column
+def find_longest_entry(column_data):
+    longest_entry = ''
+    max_length = 0
+    for entry in column_data:
+        if isinstance(entry, str) and len(entry) > max_length:
+            longest_entry = entry
+            max_length = len(entry)
+    return longest_entry, max_length
+
+# Initialize a dictionary to store results
+longest_entries = {}
+
+# Iterate over each column
+for column in df.columns:
+    longest_entry, max_length = find_longest_entry(df[column])
+    longest_entries[column] = (longest_entry, max_length)
+
+# Print the results
+for column, (entry, length) in longest_entries.items():
+    print(f"Column: {column}")
+    print(f"Longest entry: {entry}")
+    print(f"Length: {length}")
+    print()
