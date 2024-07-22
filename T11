@@ -1,0 +1,187 @@
+Open sidebar
+ChatGPT
+
+I am in the process of creating Roadmap for migration from SAS to Databricks. The Road is for September 2024 to December 2027. 
+
+I will explain about the current SAS environment we have in our existing architecture and also I will also let you know about different phases in the roadmap one by one. Can you let me know the duration of each phases and also what can be done in each phase
+ChatGPT
+Absolutely, I'd be happy to help you outline the phases of your migration roadmap from SAS to Databricks. Please go ahead and provide the details of your current SAS environment and the different phases you have planned. I'll then assist you with determining the duration for each phase and what activities should be included.
+
+
+
+
+
+I will first let you know the current SAS framework. Then I will talk about each phases one by one 
+ChatGPT
+Sounds like a good plan. Please go ahead and describe your current SAS framework. Once you provide that information, we can move on to discussing each phase of the migration roadmap.
+
+
+
+
+
+There are around 78 suites in our SAS framework. A suite here refers to a set of programs associated with a business functionality. There are no advanced analytical capabilities. Instead , only basic transformations are happening in the SAS. It extracts data from an application called i90 which is residing in IBM db2 for iseries, also it extracts data from SQL server. The codes are not managed in any git repository. Instead all are managed in windows data share. All dev, uat and production environment are residing in the same windows server. The data created by it is also loaded into the datashare. There are no CI/CD or any devops happening. Instead the changes are deployed manually. There are no machine learning capabilities. Also, the cost of the license seems to be high . They have license for both server and client separately. Upgrade has happened around 4 to 5 times in the last 27 years. It is used by various consumers of the Insurance industry such as Reserving, Pricing, Claims, Tax, Finance, Underwriting,  Agency. Also, the output of this framework is either CSV report directly sent to the consumer or it is used for visualization by Tableau or SAP business objects 
+ChatGPT
+Thanks for providing the details about your current SAS framework. Based on your description, the SAS environment is relatively basic with several limitations, such as the absence of advanced analytics, lack of CI/CD processes, manual deployment, and high licensing costs. Here is a summary of your current SAS framework:
+
+Suites: 78 suites (sets of programs) associated with business functionalities.
+Analytical Capabilities: Basic transformations, no advanced analytics or machine learning.
+Data Sources: Extracts data from i90 (IBM DB2 for iSeries) and SQL Server.
+Code Management: Codes are managed in a Windows data share, not in a git repository.
+Environments: Dev, UAT, and production environments are on the same Windows server.
+Data Storage: Data is loaded into the Windows data share.
+Deployment: Manual deployment without CI/CD or DevOps practices.
+Licensing: High cost with separate licenses for server and client.
+Usage: Used by various departments like Reserving, Pricing, Claims, Tax, Finance, Underwriting, and Agency.
+Outputs: CSV reports sent to consumers or used for visualization in Tableau or SAP Business Objects.
+Now, let's discuss the phases of your migration roadmap. Please go ahead and describe each phase you have in mind, and I'll help you determine the duration and activities for each phase.
+
+
+2/2
+
+
+
+
+
+I have 6 rent phases under assessment and planning which
+1. Assessment current state
+2. Identify Pain points
+3. Set objectives
+4. Evaluate Alternatives
+5. Design Target architecture 
+6. Develop Migration strategy 
+ChatGPT
+Great, let's break down each of these phases and outline their duration and activities:
+
+Phase 1: Assessment of Current State
+Duration: 3 months (September 2024 - November 2024)
+
+Activities:
+
+Inventory and Documentation: Document all existing SAS suites, data sources, workflows, and outputs.
+Stakeholder Interviews: Engage with users from various departments (Reserving, Pricing, Claims, Tax, Finance, Underwriting, Agency) to understand how they use the system.
+Performance Analysis: Analyze the performance and limitations of the current SAS environment.
+Dependency Mapping: Identify dependencies between different suites and external systems.
+Phase 2: Identify Pain Points
+Duration: 2 months (December 2024 - January 2025)
+
+Activities:
+
+User Feedback: Collect detailed feedback from users about issues they face (e.g., performance, usability, manual processes).
+Technical Issues: Identify technical pain points such as lack of CI/CD, manual deployments, and high licensing costs.
+Process Bottlenecks: Document process inefficiencies and areas for improvement.
+Cost Analysis: Evaluate the cost implications of the current setup.
+Phase 3: Set Objectives
+Duration: 2 months (February 2025 - March 2025)
+
+Activities:
+
+Define Goals: Establish clear objectives for the migration (e.g., reduce costs, improve performance, automate deployments).
+Success Criteria: Define success criteria and key performance indicators (KPIs) for the migration.
+Stakeholder Alignment: Ensure all stakeholders are aligned on the objectives and success criteria.
+Risk Assessment: Identify potential risks and mitigation strategies.
+Phase 4: Evaluate Alternatives
+Duration: 4 months (April 2025 - July 2025)
+
+Activities:
+
+Tool Evaluation: Evaluate Databricks and other potential alternatives.
+Proof of Concept (PoC): Conduct PoCs to validate the feasibility and benefits of Databricks.
+Cost-Benefit Analysis: Perform a cost-benefit analysis of the shortlisted alternatives.
+Vendor Demos: Organize demos and presentations from potential vendors.
+Phase 5: Design Target Architecture
+Duration: 4 months (August 2025 - November 2025)
+
+Activities:
+
+Architecture Blueprint: Design the target architecture for the new Databricks environment.
+Data Flow Design: Define data flows between source systems, Databricks, and output systems.
+Integration Plan: Plan for integration with existing tools like Tableau and SAP Business Objects.
+Security and Compliance: Ensure the new architecture meets security and compliance requirements.
+Phase 6: Develop Migration Strategy
+Duration: 3 months (December 2025 - February 2026)
+
+Activities:
+
+Migration Plan: Develop a detailed migration plan, including timelines, resource allocation, and milestones.
+Phased Approach: Plan for a phased migration to minimize disruption.
+Rollback Plan: Develop rollback plans in case of issues during migration.
+Training Plan: Plan for training users and administrators on the new platform.
+Communication Plan: Develop a communication plan to keep stakeholders informed throughout the migration process.
+By February 2026, you should have a clear migration strategy and be ready to move into the implementation phases. If you have any more phases or need further details on specific phases, feel free to let me know!
+
+
+
+
+
+I want this to be done before July 2025. Can you change the duration accordingly please
+ChatGPT
+Sure, I can adjust the timeline to ensure that the assessment and planning phases are completed by July 2025. Here's the revised plan:
+
+Phase 1: Assessment of Current State
+Duration: 2 months (September 2024 - October 2024)
+
+Activities:
+
+Inventory and Documentation: Document all existing SAS suites, data sources, workflows, and outputs.
+Stakeholder Interviews: Engage with users from various departments (Reserving, Pricing, Claims, Tax, Finance, Underwriting, Agency) to understand how they use the system.
+Performance Analysis: Analyze the performance and limitations of the current SAS environment.
+Dependency Mapping: Identify dependencies between different suites and external systems.
+Phase 2: Identify Pain Points
+Duration: 1 month (November 2024)
+
+Activities:
+
+User Feedback: Collect detailed feedback from users about issues they face (e.g., performance, usability, manual processes).
+Technical Issues: Identify technical pain points such as lack of CI/CD, manual deployments, and high licensing costs.
+Process Bottlenecks: Document process inefficiencies and areas for improvement.
+Cost Analysis: Evaluate the cost implications of the current setup.
+Phase 3: Set Objectives
+Duration: 1 month (December 2024)
+
+Activities:
+
+Define Goals: Establish clear objectives for the migration (e.g., reduce costs, improve performance, automate deployments).
+Success Criteria: Define success criteria and key performance indicators (KPIs) for the migration.
+Stakeholder Alignment: Ensure all stakeholders are aligned on the objectives and success criteria.
+Risk Assessment: Identify potential risks and mitigation strategies.
+Phase 4: Evaluate Alternatives
+Duration: 2 months (January 2025 - February 2025)
+
+Activities:
+
+Tool Evaluation: Evaluate Databricks and other potential alternatives.
+Proof of Concept (PoC): Conduct PoCs to validate the feasibility and benefits of Databricks.
+Cost-Benefit Analysis: Perform a cost-benefit analysis of the shortlisted alternatives.
+Vendor Demos: Organize demos and presentations from potential vendors.
+Phase 5: Design Target Architecture
+Duration: 3 months (March 2025 - May 2025)
+
+Activities:
+
+Architecture Blueprint: Design the target architecture for the new Databricks environment.
+Data Flow Design: Define data flows between source systems, Databricks, and output systems.
+Integration Plan: Plan for integration with existing tools like Tableau and SAP Business Objects.
+Security and Compliance: Ensure the new architecture meets security and compliance requirements.
+Phase 6: Develop Migration Strategy
+Duration: 2 months (June 2025 - July 2025)
+
+Activities:
+
+Migration Plan: Develop a detailed migration plan, including timelines, resource allocation, and milestones.
+Phased Approach: Plan for a phased migration to minimize disruption.
+Rollback Plan: Develop rollback plans in case of issues during migration.
+Training Plan: Plan for training users and administrators on the new platform.
+Communication Plan: Develop a communication plan to keep stakeholders informed throughout the migration process.
+This updated timeline ensures that all phases are completed by July 2025, allowing you to move into the implementation phase promptly. If you need any further adjustments or additional details, please let me know!
+
+
+
+
+
+
+
+
+Message ChatGPT
+
+ChatGPT can make mistakes. Check important info.
+ChatGPT
