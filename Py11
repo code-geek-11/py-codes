@@ -1,0 +1,146 @@
+Open sidebar
+ChatGPT
+
+What is the percentage of time reduction if a job which runs for 20.mins I now completed in 20.secs
+ChatGPT
+To calculate the percentage of time reduction, we first need to convert both durations to the same unit (seconds), then use the formula for percentage reduction:
+
+Percentage Reduction
+=
+(
+Original Time
+−
+New Time
+Original Time
+)
+×
+100
+Percentage Reduction=( 
+Original Time
+Original Time−New Time
+
+ )×100
+
+Convert the original time from minutes to seconds:
+20
+ minutes
+=
+20
+×
+60
+=
+1200
+ seconds
+20 minutes=20×60=1200 seconds
+
+The new time is already given in seconds:
+New Time
+=
+20
+ seconds
+New Time=20 seconds
+
+Apply the values to the formula:
+Percentage Reduction
+=
+(
+1200
+ seconds
+−
+20
+ seconds
+1200
+ seconds
+)
+×
+100
+Percentage Reduction=( 
+1200 seconds
+1200 seconds−20 seconds
+
+ )×100
+
+Percentage Reduction
+=
+(
+1180
+1200
+)
+×
+100
+Percentage Reduction=( 
+1200
+1180
+
+ )×100
+
+Percentage Reduction
+=
+0.9833
+×
+100
+Percentage Reduction=0.9833×100
+
+Percentage Reduction
+≈
+98.33
+%
+Percentage Reduction≈98.33%
+
+So, the job's completion time is reduced by approximately 98.33%.
+
+
+2/2
+
+
+
+
+
+What are the weakness of qlik compose
+ChatGPT
+Qlik Compose is a data integration and automation tool used for data warehousing, ETL (Extract, Transform, Load) processes, and analytics. While it offers robust capabilities, it also has certain limitations or weaknesses:
+
+Complex Setup and Configuration:
+
+Qlik Compose can be complex to set up and configure, especially for organizations with less experience in data integration tools. Initial setup might require significant time and expertise, particularly in complex environments.
+Limited Real-Time Capabilities:
+
+Qlik Compose primarily focuses on batch processing for data warehouses. While it can handle near real-time data to some extent, it may not be as strong as other tools specifically designed for real-time data integration or streaming analytics.
+Scalability Challenges:
+
+As data volumes grow, users may encounter performance and scalability challenges. This can be particularly true for very large datasets or when integrating data from multiple, diverse sources.
+Cost:
+
+The licensing and operational costs of Qlik Compose can be high, particularly for smaller organizations. It is part of a broader suite of Qlik tools, which might require additional purchases to unlock full functionality.
+Limited Support for Certain Data Sources:
+
+While Qlik Compose supports many common data sources, it might lack seamless integration with some newer or less common data platforms. This could limit its applicability in certain environments.
+Learning Curve:
+
+Users unfamiliar with Qlik products might face a steep learning curve. The interface and workflows in Qlik Compose are not always intuitive, particularly for those new to ETL processes or data warehousing.
+Dependency on Other Qlik Products:
+
+Qlik Compose is often used alongside other Qlik tools (like Qlik Replicate or Qlik Sense) for a complete solution. This can create dependency on a single vendor ecosystem, which might limit flexibility and increase costs.
+Limited Customization:
+
+While Qlik Compose offers pre-built templates and automation features, users looking for highly customized solutions may find it restrictive. Advanced custom ETL or data transformation tasks might require additional scripting or external tools.
+Resource Intensive:
+
+The tool can be resource-intensive, requiring significant computing power, particularly during large ETL operations. This can lead to performance bottlenecks if infrastructure is not adequately provisioned.
+These weaknesses don't necessarily detract from Qlik Compose's overall utility, but they are important considerations for organizations evaluating the tool for their data integration needs.
+
+
+
+
+
+
+Is this conversation helpful so far?
+
+
+
+
+
+Message ChatGPT
+
+ChatGPT can make mistakes. Check important info.
+ChatGPT
