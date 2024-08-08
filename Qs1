@@ -1,0 +1,92 @@
+Open sidebar
+ChatGPT
+
+At the moment, in my team we are moving from legacy framework to Databricks. We asked databricks to provide us with cost estimates.
+ Following are the questions asked to us by the the databricks team
+
+1. How many environments you will require 
+2. Storage needed : current data volume and expected increase over year
+3. Ingestion: how frequently you will refresh the data
+4. Consumption: How many queries on a daily basis? Or estimated usage(in hours)?
+5. Is it business critical?
+6. Is disaster recovery needed?
+
+I need your help in answering above all queries 
+ChatGPT
+To provide answers to the questions asked by the Databricks team, you’ll need to gather some information about your current and projected usage, as well as the business requirements of your organization. Below are guidelines and examples on how you might address each question:
+
+1. How many environments will you require?
+Typical Environments:
+Development: For development and testing of new features.
+Staging: For pre-production testing, which closely mirrors the production environment.
+Production: The live environment where the business-critical operations occur.
+Additional Environments: You might also consider separate environments for training, sandbox, or data science exploration.
+Answer Example:
+"We will require three environments: Development, Staging, and Production. Each environment will be used for different stages of the deployment lifecycle."
+2. Storage needed: current data volume and expected increase over the year
+Current Data Volume:
+Assess your current data storage requirements. Consider all data sources (structured, semi-structured, and unstructured).
+Expected Growth:
+Estimate the increase in data volume over the next year based on historical growth patterns or upcoming projects that may increase data ingestion.
+Answer Example:
+"Currently, we have 50 TB of data stored. We anticipate a 20% annual increase due to new data sources being integrated, bringing the total to approximately 60 TB by the end of the year."
+3. Ingestion: How frequently will you refresh the data?
+Data Refresh Frequency:
+Consider how often different data sets are updated. Common intervals include real-time, hourly, daily, or weekly.
+Include any batch processing or streaming data requirements.
+Answer Example:
+"We plan to refresh the majority of our datasets on a daily basis. However, some critical data streams will be ingested in real-time, requiring continuous data processing."
+4. Consumption: How many queries on a daily basis? Or estimated usage (in hours)?
+Query Frequency:
+Estimate the number of queries or jobs that will be run on a daily basis.
+Include the expected complexity (simple vs. complex queries) and the estimated usage in terms of compute hours.
+Answer Example:
+"On average, we expect around 500-700 queries per day, with an estimated usage of approximately 200 compute hours daily. This includes both ad-hoc queries and scheduled jobs."
+5. Is it business critical?
+Business Impact:
+Assess whether the data processing and analysis done on Databricks is critical to business operations.
+Consider the impact on the business if the service were to experience downtime or performance issues.
+Answer Example:
+"Yes, this is business-critical. The platform will be used for real-time decision-making and analytics that directly impact our operational and strategic initiatives."
+6. Is disaster recovery needed?
+Disaster Recovery Requirement:
+Determine if your organization requires high availability and disaster recovery solutions.
+Consider Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO) based on your business continuity plan.
+Answer Example:
+"Yes, disaster recovery is required. We need a robust solution with a Recovery Time Objective (RTO) of 2 hours and a Recovery Point Objective (RPO) of 15 minutes to ensure business continuity."
+Once you have gathered the necessary details from your team or systems, you can tailor these example responses to match your specific requirements.
+
+
+
+
+
+Do you think all the above questions are relevant 
+ChatGPT
+Yes, all the questions asked by the Databricks team are highly relevant for providing an accurate cost estimate and ensuring that the platform meets your organization’s needs. Here's why each question matters:
+
+1. How many environments will you require?
+Relevance: Different environments (development, staging, production) have different resource requirements and levels of criticality. Knowing the number of environments helps in planning infrastructure, resource allocation, and cost estimation.
+2. Storage needed: current data volume and expected increase over the year
+Relevance: Storage is a significant cost driver in any cloud or data platform. Understanding your current and future storage needs allows Databricks to estimate the amount of storage you will use and recommend the appropriate tier of storage, which can impact cost.
+3. Ingestion: How frequently will you refresh the data?
+Relevance: The frequency of data ingestion affects the compute resources required. Real-time or frequent data ingestion can require more powerful (and thus more expensive) infrastructure compared to less frequent batch updates.
+4. Consumption: How many queries on a daily basis? Or estimated usage (in hours)?
+Relevance: This helps in estimating the compute resources you'll need. The number of queries and their complexity directly impact the cost, as more compute hours and higher capacity may be required to handle the workload.
+5. Is it business-critical?
+Relevance: If the workload is business-critical, it may require higher availability, better performance, and possibly premium support, which can influence cost. It also affects decisions on redundancy and failover capabilities.
+6. Is disaster recovery needed?
+Relevance: Disaster recovery is an important aspect of any business-critical application. Implementing disaster recovery measures increases costs but is essential for ensuring business continuity in case of failures. This question helps Databricks tailor a solution that meets your business resilience requirements.
+Summary:
+Each question is relevant as it addresses a different aspect of infrastructure planning, cost estimation, and risk management. By providing detailed answers to these questions, you ensure that Databricks can offer a solution that aligns with your technical requirements and budget. This also helps in preventing unexpected costs or performance issues down the line.
+
+
+
+
+
+
+
+
+Message ChatGPT
+
+ChatGPT can make mistakes. Check important info.
+ChatGPT
