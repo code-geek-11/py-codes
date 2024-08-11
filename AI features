@@ -1,0 +1,9 @@
+Category	Details
+Capabilities	Our current setup lacks AI/ML and generative AI features. We plan to integrate these capabilities with Databricks on Azure cloud.
+Existing Status	SAS: Basic machine learning features like regression and clustering; no generative AI capabilities.
+ SQL Server: Limited to traditional machine learning with SQL Server Machine Learning Services; no generative AI features.
+ Tableau: Provides basic predictive analytics with trend lines and forecasting; no generative AI capabilities.
+ SAP Business Objects: Focuses on reporting and dashboards; lacks AI/ML and generative AI features.
+ Qlik Compose & Replicate: Used for data integration and transformation; no AI/ML or generative AI features.
+Systems	All current systems (SAS, SQL Server, Tableau, SAP Business Objects, Qlik Compose, Qlik Replicate) handle data processing and reporting, but do not support advanced AI/ML or generative AI functionalities.
+Remarks	Migrating to Databricks will provide advanced AI/ML features, including generative AI capabilities like natural language generation and data synthesis, which are currently missing from our existing tools.
