@@ -7,3 +7,6 @@ Existing Status	SAS: Basic machine learning features like regression and cluster
  Qlik Compose & Replicate: Used for data integration and transformation; no AI/ML or generative AI features.
 Systems	All current systems (SAS, SQL Server, Tableau, SAP Business Objects, Qlik Compose, Qlik Replicate) handle data processing and reporting, but do not support advanced AI/ML or generative AI functionalities.
 Remarks	Migrating to Databricks will provide advanced AI/ML features, including generative AI capabilities like natural language generation and data synthesis, which are currently missing from our existing tools.
+
+
+Our existing tools lack advanced machine learning, predictive AI, and generative AI features. They mainly focus on basic data processing and reporting. This section outlines the current limitations in these areas and highlights the absence of predictive analytics capabilities. With the migration to Databricks on Azure cloud, we anticipate gaining advanced machine learning and predictive AI features, along with generative AI capabilities. This upgrade will greatly enhance our data analytics and insight generation.
