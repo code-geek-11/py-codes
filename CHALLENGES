@@ -1,0 +1,12 @@
+Integrating AI/ML capabilities into our existing framework presents several challenges and roadblocks. These include the complexity of adapting to new technologies, ensuring compatibility with legacy systems, and addressing skill gaps within the team. This section highlights the key difficulties we may face during the migration to Databricks and the implementation of advanced AI/ML features.
+
+
+Challenge	Complexity	Comments
+Skill Gap	High	Team members lack experience with new technologies like Databricks, machine learning, and AI. Training and hiring might be required.
+Data Integration	Medium	Integrating existing data sources with Databricks can be complex and may require significant restructuring.
+Legacy System Compatibility	High	Transitioning from legacy systems (SAS, SQL Server, etc.) to Databricks involves compatibility issues and data migration challenges.
+Scalability and Performance	Medium	Ensuring that the new AI/ML models scale effectively and perform well with large datasets can be challenging.
+Change Management	Medium	Managing the change process and getting buy-in from stakeholders and users for the new system may be difficult.
+Data Quality and Preparation	Medium	High-quality, clean data is crucial for effective AI/ML models; ensuring data accuracy and readiness can be challenging.
+Cost of Migration	Medium	The cost of transitioning to Databricks and implementing new AI/ML capabilities can be significant and needs careful budgeting.
+Compliance and Security	High	Ensuring that the new AI/ML systems comply with industry regulations and maintain data security standards is crucial.
