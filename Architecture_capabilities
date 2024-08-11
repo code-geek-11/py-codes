@@ -1,0 +1,35 @@
+1. Transition Architecture Pictures
+Aspect	Details
+Current State	Visualize the existing on-premise setup with tools like SAS, SQL Server, Tableau, etc.
+Transition State	Display any intermediate steps, showing a hybrid or partial migration setup, if applicable.
+Future State	Final architecture diagram with Databricks on Azure, showcasing the multi-hop/medallion framework and integrations with Azure services.
+2. Architecture Building Blocks
+Building Block	Details
+Data Ingestion	Raw data is ingested into the Bronze layer of the Databricks medallion architecture.
+Data Storage	Use Delta Lake in Databricks to manage data across Bronze, Silver, and Gold layers, ensuring reliability and performance.
+Data Processing	Utilize Apache Spark for scalable data processing and integrate AI/ML capabilities into the workflow.
+Data Transformation	Transform data in the Silver layer, creating a data model for analytics and reporting.
+Data Access	Gold layer contains consumable data optimized for reporting and BI tools.
+Security & Governance	Implement RBAC, data governance, and data quality processes within Databricks and Azure.
+3. Technical Solution Building Blocks
+Technical Solution	Details
+Code Management	Introduce GitHub/Bitbucket for version control and code management.
+CI/CD	Integrate Azure DevOps to automate deployments across Dev, UAT, and Prod environments.
+Data Formats	Adopt Parquet and Delta file formats in Databricks to enhance performance and storage efficiency.
+Event-Driven Workflows	Shift from time-triggered to event-triggered workflows using Databricks and Azure services.
+Data Governance	Implement data governance features like data cataloging, lineage tracking, and quality monitoring.
+Security	Enhance security with RBAC, encryption, and secure access controls within Azure.
+4. Business Benefits per Transition
+Business Benefit	Details
+Reduced Costs	Lower operational, maintenance, and licensing costs by consolidating platforms into Databricks.
+Improved Efficiency	Faster development and deployment cycles with automated CI/CD pipelines and event-driven workflows.
+Enhanced Analytics	Access to advanced AI/ML capabilities, leading to better business insights and decision-making.
+Streamlined Operations	Single platform for all analytics needs, reducing complexity and tool sprawl.
+Better Data Quality	Improved data governance and quality control, resulting in more reliable and accurate reporting.
+Increased Flexibility	Greater development and customization flexibility, overcoming limitations of legacy tools.
+5. Cost per Transition Architecture
+Cost Aspect	Details
+Current Costs	Breakdown of current costs associated with on-premise tools like SAS, SQL Server, Tableau, etc.
+Transition Costs	Estimated costs for migrating to Databricks on Azure, including data migration, training, and implementation.
+Future Costs	Projected costs post-transition, including Databricks and Azure subscription fees, and potential cost savings.
+ROI Analysis	Calculate ROI by comparing cost savings and business benefits from the transition against the transition costs.
