@@ -1,0 +1,19 @@
+1. Overview
+Right now, technologies like SAS, SQL Server, Tableau, SAP Business Objects, Qlik Compose, and Qlik Replicate, are located on our own servers residing in on-premise as explained already except SAP business Objects which was recently deployed in Azure VMs. As part of data strategy, the plan is to move towards Databricks on Azure Cloud to get better data tools with advanced analytical capabilities. This move will start in September 2024 and finish by 2027. Every migration is tested with pilot projects before fully moving over. Our team doesn’t know much about these new tools yet, so the plan also involves upskilling the team.
+2. List of Opportunities - Short Term and Long Term
+•	Short Term:
+o	Pilot Migrations: POCs were conducted on data bricks and it is found to exhibit the features what we are looking for. Test moving Pilot projects to Databricks to find and fix any issues before we do the full migration.
+o	Training: Train our data team / Internal resources from other teams on Databricks, Azure Cloud, and other new tech to get ready for the future, especially for ML/AI.
+o	Start Migration: Begin moving less critical data to Databricks first to help the team get used to the new system.
+o	Keep Front end BI Tools: We’ll keep using Tableau and SAP Business Objects for now to make sure everything runs smoothly during the change.
+•	Long Term:
+o	Complete Migration: Finish moving all our important data to Databricks and make sure it’s working well.
+o	Use Advanced Tools: Start using Databricks for advanced data analysis that wasn’t possible with the old system such as bringing in machine learning and AI to get smarter insights and make better decisions.
+o	Improve Operations: Make our data processes more efficient and cut down on costs by fully using Databricks on Azure.
+3. Benefits
+•	Better Data Analysis: Moving to Databricks will give us better tools for analyzing data and making decisions.
+•	Ready for the Future: Adding ML/AI will keep us ahead with the latest tech and stay competitive in the insurance field.
+•	Smooth Transition: Testing with pilot migrations will help us fix problems early and make the full move smoother.
+•	Flexible and Scalable: Azure Cloud will be more flexible and easier to scale compared to our current setup.
+•	Lower Costs: Over time, using the cloud will cut down on infrastructure and maintenance costs.
+•	Future-Ready: This move will set us up for future needs while keeping our old tools like Tableau and SAP Business Objects for now.
