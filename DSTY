@@ -1,0 +1,34 @@
+Each tool in our architecture ranging from data management and analytics to data visualization and integration comes with its own set of security features and potential risks. 
+To comprehensively understand how each tool contributes to our overall data security, we evaluate them across several key headings: 
+	Category 
+It refers to the primary function and role of the software within our architecture, such as data management, business intelligence, or data integration
+	Maturity Level
+This assesses how well-established and robust the security features of the tool are, reflecting its effectiveness in safeguarding data.
+ 
+
+1. SAS (Statistical Analysis System)
+. Category: Data Management and Analytics
+
+Maturity Level: High 
+It has various compliance certificates such as Health Insurance Portability and Accountability Act (HIPPA), ISO/IEC 27001, Sarbanes-Oxley Act (SOX), Federal Information Security Management Act (FISMA), Payment Card Industry Data Security Standard (PCI DSS), Financial Industry Regulatory Authority (FINRA)). The biggest risk in SAS in our existing framework is the Unauthorized access to sensitive data which is caused by weak user access controls. Difficulty to ensure that appropriate access controls are enforced across different environments, when all environments are on the same server.
+
+2. Qlik Compose/Replicate 
+Category: Data Warehouse Middleware
+Maturity Level: Medium
+It supports AES-128 encryption, but not the AES-256 encryption which is required for compliance with newer data protection regulations as seen in https://community.qlik.com/t5/Suggest-an-Idea/Qlik-Replicate-encrypt-specific-fields-with-AES256/idi-p/1984447. Role Based Access control is absent. Hence, difficult to hide data from specific users as seen in https://community.qlik.com/t5/Suggest-an-Idea/Qkil-replicate-Qlik-Enterprise-manger-Advanced-Security-by-RBAC/idi-p/1793866.In Qlik, you can mask PII information by using a mix of section access and masking fields in the script with the hash function. But if you need to mask the data with specific algorithms, Qlik might not be the best option. You might have to depend on the underlying database solutions to get that done.
+
+3. SAP Business Objects
+Category: BI 
+Maturity Level: High
+More about the data security in BORP can be found at the below locations
+5. Tableau
+Category: BI
+Maturity Level: High
+
+
+
+6. SQL Server
+Category: Database Management
+Maturity Level: High
+Risks:
+SQL injection attacks might compromise your data. Data breaches could happen if encryption and access controls are not strong. There’s a risk from insiders if roles are not managed well. SQL Server has strong security, but it needs regular updates and monitoring to stay secure.
