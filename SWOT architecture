@@ -1,0 +1,26 @@
+Strengths	Weaknesses
+- Established architecture with familiar tools (SAS, SQL Server, Tableau, SAP Business Objects, Qlik) that have been used for years.	- High costs due to using multiple tools for similar ETL processes (SAS and Qlik Replicate/Compose).
+- No CI/CD or automated deployment via DevOps.
+- Single-tier environment in SAS with Dev, UAT, and Prod jobs, codes, and data in the same environment.
+- Multiple data models exist without a centralized model.
+- Lack of advanced analytical capabilities like AI/ML.
+- Diverse set of tools provides flexibility in handling different types of data and reports.	- Data silos and lack of cross-skilling among team members, leading to high dependency on specific resources.
+- All tools are either on-premise or in cloud as IaaS, leading to challenges in scalability and high maintenance costs.
+- Edit access in production/UAT environments, increasing risk.
+- Lack of proper documentation and design for existing code, especially in SAS.
+- Long-standing systems have likely built a lot of organizational knowledge and expertise.	- The SAS-centered architecture is a "black box" with no available documentation for understanding the code.
+- Architecture is complex and resembles a "spaghetti" structure, making management difficult.
+- Reporting tools like Tableau and SAP Business Objects add complexity without a unified approach.
+- Limited adaptability and flexibility in the current data framework.
+Opportunities	Threats
+- Migration to a unified platform like Databricks on Azure could simplify architecture, reduce costs, and improve performance.	- High costs associated with maintaining legacy systems.
+- Potential disruptions during migration to a new platform.
+- Dependency on key personnel who have in-depth knowledge of the current, undocumented systems.
+- Resistance to change within the team.
+- Implementing advanced AI/ML capabilities could unlock new insights and add significant value to the business.	- Rapid technological changes might render current tools and frameworks obsolete.
+- Ongoing high maintenance effort required to keep legacy systems running smoothly.
+- Security risks due to edit access in production/UAT environments.
+- Leveraging CI/CD and automated deployment tools could improve efficiency, reduce errors, and enhance scalability.	- Lack of documentation and proper design processes can lead to errors and difficulties in troubleshooting or further development.
+- Potential vendor lock-in with legacy systems and tools.
+- Transitioning to SaaS could alleviate maintenance burdens and allow the team to focus on development and innovation.	- Complexity in integrating current data models and processes with new systems.
+- Difficulties in upskilling existing team members to work with new tools and technologies.
