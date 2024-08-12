@@ -1,0 +1,37 @@
+
+Strengths
+Established data infrastructure that can be used as a foundation for AI/ML initiatives.
+Experienced team with deep knowledge of existing data processes and legacy systems, potentially aiding the integration of AI/ML
+Strong ETL processes and data management practices in place, which could be adapted to support AI/ML pipelines.
+Some familiarity with data governance and quality processes, which are crucial for successful AI/ML initiatives.
+
+Weaknesses
+- Complete absence of AI/ML capabilities in the current framework, relying solely on traditional data analytics tools.
+- Existing tools (SAS, SQL Server, Tableau, SAP Business Objects) are not optimized for AI/ML tasks.
+- Lack of a centralized, integrated platform that supports end-to-end AI/ML workflows.
+- Data silos and fragmented architecture hinder the ability to leverage data for AI/ML purposes.
+- No automated processes for model deployment.
+- High dependency on outdated systems like SAS, which are not well-suited for modern AI/ML algorithms and frameworks.
+- Limited flexibility and customization in existing tools to support AI/ML experimentation and innovation.
+- No team expertise or training in advanced AI/ML tools and techniques.
+- High cost and complexity associated with upgrading or replacing current tools to support AI/ML.
+- Lack of documentation and standardization poses challenges.
+
+Opportunities
+Migrating to a unified platform like Databricks on Azure can provide robust AI/ML capabilities, including real-time analytics, predictive modeling, and automation.
+Leveraging cloud-based AI/ML services can lower the barrier to entry and reduce the need for heavy infrastructure investments.
+AI/ML can enable advanced predictive analytics, helping to unlock new business insights and optimize operations.
+Adoption of CI/CD pipelines can facilitate rapid deployment and continuous improvement of AI/ML models.
+
+
+Threats
+
+
+- Resistance to adopting AI/ML technologies due to a steep learning curve and potential disruption to existing workflows.
+- Rapid technological changes might render the AI/ML capabilities of new systems outdated quickly.
+- High initial costs and complexities of implementing AI/ML capabilities could lead to budget overruns and project delays.
+- Potential security and compliance risks when handling sensitive data with AI/ML tools.
+The need for extensive upskilling or hiring of new talent with AI/ML expertise.
+- Integration challenges between legacy systems and new AI/ML platforms could lead to data inconsistencies or loss.
+- Competitive pressure from other companies adopting AI/ML faster, potentially leading to a loss of market edge.
+- Vendor lock-in with new AI/ML platforms could limit flexibility and innovation in the future.
