@@ -1,0 +1,41 @@
+
+Strengths
+
+- Established use of tools like SAS, Tableau, SAP Business Objects, and SQL Server for data analytics.
+Experienced team with expertise in traditional data analytics tools.
+Ability to handle large volumes of data using established ETL processes.
+- Utilization of both on-premise and cloud-based tools allows for some level of flexibility.
+
+weakness
+- Lack of advanced analytics capabilities, such as AI/ML, limiting deeper data insights.
+- Multiple tools performing similar functions, leading to fragmented and inefficient analytics processes.
+- Limited real-time analytics capabilities.
+ Absence of a centralized data model results in inconsistent analytics and reporting.
+- Manual data integration and transformation processes increase the likelihood of errors and reduce agility.
+- Data silos limit cross-functional insights.
+- Heavy reliance on legacy systems like SAS, which are complex and difficult to maintain.
+- No automated deployment or CI/CD pipeline, leading to slower analytics deployment cycles.
+- High operational costs due to multiple tool usage.
+- Lack of documentation and standardized processes makes it difficult to scale or modify analytics workflows.
+- Inability to perform predictive analytics and scenario modeling.
+- Disconnected workflows reduce efficiency.
+
+Opportunities
+
+Transitioning to a unified platform like Databricks could streamline analytics workflows, improve performance, and reduce costs.
+Implementing AI/ML and predictive analytics could provide deeper insights and enable proactive decision-making.
+Leveraging automated deployment and CI/CD pipelines could accelerate analytics delivery and improve accuracy
+Centralizing data models could improve consistency, accuracy, and the overall quality of analytics across the organization.
+
+Threats
+
+- Resistance to adopting new tools and technologies within the team.
+- Potential data loss or corruption during the transition to new analytics platforms.
+- Increased competition from other companies with more advanced analytics capabilities.
+- High costs and complexities involved in migrating legacy analytics systems to a modern platform.
+- Dependence on legacy systems may limit the ability to quickly adopt new analytics capabilities.
+- Rapid changes in technology could outpace adaptation.
+- Potential difficulties in integrating current analytics workflows with new AI/ML capabilities.
+- Security risks associated with handling sensitive data during the transition to more advanced analytics platforms.
+- Skill gaps within the team in advanced analytics and AI/ML may slow down the adoption of new capabilities.
+- Vendor lock-in with existing analytics tools could limit flexibility and innovation.
