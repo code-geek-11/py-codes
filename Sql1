@@ -1,0 +1,8 @@
+SELECT r.policynumber
+FROM rwlmsg r
+JOIN policyhdr p ON r.policynumber = p.policynumber
+WHERE p.status = 'active' 
+  AND r.msgidm IN ('a', 'b')
+GROUP BY r.policynumber
+HAVING COUNT(DISTINCT r.msgidm) = 2
+   AND COUNT(DISTINCT CASE WHEN r.msgidm NOT IN ('a', 'b') THEN r.msgidm END) = 0;
