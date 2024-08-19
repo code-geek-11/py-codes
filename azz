@@ -1,0 +1,341 @@
+Hi there. I'm an Azure chatbot. I'll connect you to the right resource.
+
+Select 'Start' to begin.
+Start Read
+Privacy
+OK, let's get started. What kind of Azure help do you need?
+Business/Personal Read
+What kind of help do you need?
+Pricing Estimates Read
+I'll connect you with the Azure sales team now.
+ at 6:35, Aug 19:
+Just a minute while I transfer you.
+ at 6:35, Aug 19:
+You can correspond with us at your convenience during this conversation. Bryan will be with you shortly.
+Hi Read
+Hello there. Welcome to Microsoft Azure Sales. My name is Bryan. Can I start by taking your first and last name please?
+You can call me RJ Read
+It's a pleasure to meet you, RJ
+Hope you are doing fine today!
+i would like to know about pre-purchase plan for a year Read
+Do you have any volume size for a pre-purchase plan Read
+May I know what particular service in Azure you would be needing?
+Datarbicks Read
+Let me just check this one and thank you for your interest in Azure, can you tell me your current setup? Can you tell me more about your project?
+I am looking for 10 Tb of storage and it can grow at an average of around 10 percent every year Read
+Azure Databricks offers a pre-purchase plan called Databricks Commit Units (DBCU), which allows you to save on costs by pre-paying for Databricks Units (DBU) for a one-year or three-year term. This plan can save you up to 37% compared to pay-as-you-go pricing.
+
+Key Features of the Pre-Purchase Plan:
+Flexible Usage: You can use the pre-purchased DBCUs at any time during the purchase term. They don’t expire on an hourly basis.
+
+Applicable to All Workloads: The pre-purchase applies to all Databricks workloads and tiers.
+
+Automatic Deduction: Any Azure Databricks usage will automatically deduct from the pre-purchased DBUs.
+For the Volume Size:
+Azure does not specify a fixed volume size for the pre-purchase plan. Instead, you can determine the right size to buy based on your projected usage. The usage is deducted from the pool of pre-purchased units according to specific ratios for different workloads and tiers.
+Let me show you a sample pricing wherein you just need to set your requirements in order for you to get the estimated cost of the Azure Databricks service.
+I am more confused now Read
+So, u dont sell storage ? Read
+https://azure.com/e/47c4212e4e2149fc8c5fa10700c1ae89
+for DBCU 12500 WHAT IS THE ASSOCIATED STORAGE ? Read
+I understand, it can be a bit confusing. Let me clarify:
+
+Azure Databricks’ pre-purchase plan is specifically for compute resources, not storage. However, Azure does offer various storage solutions separately. Here are some key storage options:
+
+Azure Storage Options:
+
+Azure Blob Storage: Ideal for storing large amounts of unstructured data like text or binary data.
+
+Azure Data Lake Storage: Optimized for big data analytics workloads.
+
+Azure Files: Managed file shares that can be accessed via SMB protocol.
+
+Azure Disk Storage: High-performance, durable block storage for Azure VMs.
+Each of these storage options can be used in conjunction with Azure Databricks for different data storage needs.
+I get that. What are the costs associated with it ? Read
+if I store 10 TB of data, how much cost will I incur ? Read
+Please bear with me
+ok Read
+Let’s break down the costs for storing 10 TB of data using different Azure storage options:
+
+1. Azure Blob Storage:
+Hot Tier:
+Cost: (10,000 \text{ GB} \times $0.0184/\text{GB} = $184)
+Cool Tier:
+Cost: (10,000 \text{ GB} \times $0.01/\text{GB} = $100)
+Archive Tier:
+Cost: (10,000 \text{ GB} \times $0.00099/\text{GB} = $9.90)
+
+2. Azure Data Lake Storage:
+Hot Tier:
+Cost: (10,000 \text{ GB} \times $0.0184/\text{GB} = $184)
+Cool Tier:
+Cost: (10,000 \text{ GB} \times $0.01/\text{GB} = $100)
+Archive Tier:
+Cost: (10,000 \text{ GB} \times $0.00099/\text{GB} = $9.90)
+
+3. Azure Files:
+Premium:
+Cost: (10,000 \text{ GB} \times $0.24/\text{GB} = $2,400)
+Transaction Optimized:
+Cost: (10,000 \text{ GB} \times $0.10/\text{GB} = $1,000)
+Hot:
+Cost: (10,000 \text{ GB} \times $0.015/\text{GB} = $150)
+Cool:
+Cost: (10,000 \text{ GB} \times $0.01/\text{GB} = $100)
+
+4. Azure Disk Storage:
+Premium SSD:
+Cost: (10,000 \text{ GB} \times $0.122/\text{GB} = $1,220)
+Standard SSD:
+Cost: (10,000 \text{ GB} \times $0.06/\text{GB} = $600)
+Standard HDD:
+Cost: (10,000 \text{ GB} \times $0.03/\text{GB} = $300)
+
+Please let me know which storage service you would like to use for your Azure Databricks.
+Can you be more specific please. I need cost per year for 10 tb storage. Read
+Above information does not give any hint about yearly cost Read
+if u give monthly cost also that is fine Read
+alright I will help you to provide the exact pricing per year however, kindly specify what particular storage service you prefer to use for Azure Databricks
+please provide for everything you have given. I will decide accordingly Read
+I one I mention earlier is for Monthly cost, let me provide you some recommendation for the best storage service that you can use in Databricks
+For most big data and analytics workloads in Azure Databricks, Azure Data Lake Storage (ADLS) Gen2 is often the best choice due to its performance, scalability, and seamless integration with Databricks. If you have specific needs for cost optimization or shared file access, Azure Blob Storage or Azure Files might be more suitable.
+We will be using ADLS Read
+Let me specify them all so you can select which one you prefer lets start with . Azure Data Lake Storage (ADLS) Gen2:
+Best for Big Data Analytics: Optimized for high-performance analytics workloads.
+
+Scalability: Handles large volumes of data efficiently.
+
+Integration: Seamlessly integrates with Azure Databricks.
+
+Cost: Competitive pricing, especially for large datasets.
+So the above one is for monthly cost ..is it ? Read
+Correct
+I added Datalake storage
+https://azure.com/e/02e48c2f012d4325a8b3d2053944bf75
+I just put 1 TB since it's monthly
+you can change that depends on the size you need per month
+May I know if you already have an Azure account?
+If you have not signed up yet to Azure free trial let me create you a customized link for you to sign up for the free trial and for you to get the $200 free credits to start testing Azure Databricks and ADLS.
+
+I just need to get your email and phone number and I will generate the free trial that you will use to register
+give me a minute please. I am looking at the estimate Read
+Sure! Please take your time
+estimates are not clear yet Read
+Which part are you having some confusion?
+I need a fixed capacity. Not a pay as you go one , like I explianed already Read
+10 TB and it can grow upto 10 percent every year Read
+it shows a 100 TB reserved capacity . Can we reduce it ? Read
+checking
+Also, I will be using 3 different environments (Dev, UAT and Prod) and the 10 tb is shared between all the 3 environments Read
+Lets assume each environment has 4 tb each and the count adds upto 12 TB Read
+For a fixed capacity, Azure Data Lake Storage (ADLS) offers reserved capacity pricing, which allows you to commit to a specific amount of storage for a one-year or three-year term, providing significant cost savings.
+
+Cost Estimate for 10 TB of ADLS for One Year:
+Hot Storage Reserved Capacity:
+Monthly cost for 100 TB: $1,4061.
+Annual cost for 100 TB: $1,406 \times 12 = $16,872.
+Cost for 10 TB (10% of 100 TB): $16,872 \times 0.10 = $1,687.20 per year.
+
+
+Azure Storage reserved capacity for Data Lake Storage Gen2 is typically offered in increments of 100 TB and 1 PB1. Unfortunately, there isn’t a smaller reserved capacity option available directly from Azure.
+
+However, you can still use the pay-as-you-go model for smaller storage needs, which allows you to pay only for the storage you use without committing to a large reserved capacity. This might be more cost-effective if your storage requirements are significantly below 100 TB.
+Got it! If you have multiple environments each with 4 TB of data, totaling 12 TB, here’s how you can estimate the costs using Azure Data Lake Storage (ADLS) with the pay-as-you-go model:
+Please give me 2 mins
+Please...lets not discuss about pay as u go Read
+I am looking only for fixed subscriptions Read
+Cost Estimate for 12 TB of ADLS for One Year:
+
+Hot Storage:Monthly Cost: (12,000 \text{ GB} \times $0.0184/\text{GB} = $220.80)
+
+Annual Cost: ( $220.80 \times 12 = $2,649.60 )
+Growth Consideration:
+
+If your storage grows by 10% each year, here’s how the cost would look:
+Year 1: 12 TB = $2,649.60
+
+Year 2: 13.2 TB = (13,200 \text{ GB} \times $0.0184/\text{GB} \times 12 = $2,914.56)
+
+
+Year 3: 14.52 TB = (14,520 \text{ GB} \times $0.0184/\text{GB} \times 12 = $3,206.02)
+I understand that you would like to go with the fixed yearly subscription. We do have that option however.
+Reserved Capacity Pricing for ADLS Gen2:
+Minimum Reserved Capacity: 100 TB
+Term Options: 1-year or 3-year commitment
+Cost Estimate for 100 TB Reserved Capacity:
+1-Year Term: Approximately $16,872 per year.
+3-Year Term: Offers additional savings compared to the 1-year term.
+but in yiur estimate it is showing me 1,746.50 per month Read
+Please try to select upfront and 1 year
+I did and it shows me $20,958.00 Read
+per year Read
+That is the problem because the min is set to be 100TB
+If you want you can use a different storage aside from ADLS
+What is a premium tier Read
+it lloks expensive Read
+Can you confirm that you are referring to ADLS Premium tier?
+yes Read
+and it does not seems to have reserved capacity too ? Read
+The Premium tier for Azure Data Lake Storage (ADLS) Gen2 is designed for workloads that require low, consistent latency and high transaction rates. Here are some key features and considerations:
+
+Key Features of Premium Tier in ADLS:
+
+Low Latency: Provides lower storage latencies compared to other tiers, making it ideal for interactive workloads.
+
+High Transaction Rates: Suitable for applications with a high number of transactions, such as IoT, streaming analytics, AI, and machine learning.
+
+Enhanced Performance: Offers better performance for big data analytics applications.
+this is not offered by standard tier ? Read
+For Cost Considerations
+
+Higher Cost: The Premium tier is more expensive than the Hot, Cool, and Archive tiers due to its enhanced performance and low latency.
+
+Value for Money: While it is more costly, it provides significant value for performance-critical applications.
+can I change from standard tier to premium tier anytime ? Read
+The Premium tier for Azure Data Lake Storage (ADLS) Gen2 does not currently offer reserved capacity pricing. Reserved capacity is available for the Standard tier of ADLS Gen2.
+
+Higher Cost: Due to its enhanced performance and low latency, it is more expensive than the Standard tier
+can I change from standard tier to premium tier anytime ? Read
+Upon checking, you cannot directly convert an existing standard general-purpose v2 storage account to a premium block blob storage account for Azure Data Lake Storage (ADLS) Gen2. To migrate to the Premium tier, you need to create a new premium block blob storage account and then migrate your data to this new account.
+Steps to Migrate from Standard to Premium Tier:
+Create a Premium Block Blob Storage Account:
+In the Azure portal, create a new storage account.
+Choose the Premium performance option and the Block blobs account type.
+Enable the Hierarchical namespace setting to unlock ADLS Gen2 capabilities.
+
+Migrate Data:
+Use tools like AzCopy, Azure Data Factory, or other data migration tools to transfer your data from the standard storage account to the new premium storage account.
+is it a direct one to one migration ? Read
+Migrating from a standard tier to a premium tier in Azure Data Lake Storage (ADLS) Gen2 is not a direct one-to-one migration. Instead, you need to create a new premieum storage account and then migrate your data to this new account
+*premium
+ok Read
+does creating 3 environments create any additional cost ? Read
+(prod, dev and uat) Read
+Yes, creating multiple environments (such as production, development, and UAT) in Azure Data Lake Storage (ADLS) will incur additional costs. Each environment will have its own storage account, and the costs will be based on the amount of data stored and the type of storage tier used.
+so If I create 3 environments..I should get 3 ADLS accounts ? Read
+3* 100 TB ? Read
+cant I share the 100 TB among the 3 ? Read
+Yes, you can share the 100 TB reserved capacity among multiple environments by using a shared scope for your Azure Storage reserved capacity. This allows you to distribute the reserved capacity across multiple subscriptions or resource groups within your billing context.
+
+How to Share Reserved Capacity:
+Purchase Reserved Capacity: Buy the 100 TB reserved capacity for Azure Data Lake Storage (ADLS) Gen2.
+
+Scope the Reservation: When purchasing, set the reservation scope to cover multiple subscriptions or a management group. This way, the reserved capacity can be shared across all environments (prod, dev, UAT) within the specified scope.
+In that case, cost for creating 3 environment is same as one ? Read
+Correct, if you share the 100 TB reserved capacity among the three environments (production, development, and UAT), the cost will be the same as having a single 100 TB reserved capacity. This approach allows you to efficiently utilize the reserved capacity across multiple environments without incurring additional costs for each environment.
+but all the 3 environment will be using the same storage account ? Read
+Please be informed that, if you want to share the 100 TB reserved capacity among the three environments (production, development, and UAT), you don’t necessarily have to use the same storage account for all environments. Instead, you can create separate storage accounts for each environment and still share the reserved capacity.
+Would you like to start by signing up for a free trial account in Azure just for you to see how Azure Databricks works with ADLS.
+great Read
+I will definitely sign up..need few more information please Read
+Sure! I will help you with the sign up.
+What else would you be needing?
+Suppose, lets assume that I have purchased the databricks, the ingestions process is taking 3 hours to complete. Will I be charged for that ? Read
+or only for the storage Read
+When using Azure Databricks, you will be charged for both the compute resources used during the ingestion process and the storage.
+Charges Involved:
+Compute Charges:
+Databricks Units (DBUs): You are billed for the compute resources used during the ingestion process. A DBU is a unit of processing capability per hour, billed on a per-second usage basis1.
+
+VM Costs: The cost depends on the size and type of virtual machine (VM) instances running Azure Databricks.
+
+
+Storage Charges:
+Data Storage: You are billed for the amount of data stored in Azure Daata Lake Storage (ADLS) or other storage services you use.
+*Data
+Let me provide you with a sample Scenario:
+
+Ingestion Process: If your ingestion process takes 3 hours to complete, you will be charged for the DBUs and VM costs for those 3 hours.
+
+Storage: You will also be charged for the data stored in ADLS.
+but since I am not using a pay as u go..will I be charged extra for storage ? Read
+However we do have Cost Optimization Tips:
+
+Use Job Compute: Schedule your ingestion jobs using Databricks Jobs to optimize costs.
+
+Monitor Usage: Use Azure Cost Management tools to monitor and control your compute and storage costs.
+Even with a reserved capacity plan for Azure Data Lake Storage (ADLS), you will still incur charges for the compute resources used during the ingestion process in Azure Databricks
+but the charges will be reduced from the amount I paid upfront ? Read
+The charges for compute resources (Databricks Units and VM costs) are not covered by the upfront payment for reserved storage capacity. The reserved capacity plan only covers the cost of storing data up to the reserved amount (e.g., 100 TB). Let me provide you a breakdown
+Breakdown:
+Storage Costs: Covered by your reserved capacity plan. You won’t incur additional storage charges as long as you stay within the reserved capacity.
+
+Compute Costs: Billed separately based on usage. These costs are not deducted from the amount you paid upfront for storage.
+
+Example:
+Storage: If you have a 100 TB reserved capacity, you won’t pay extra for storing up to 100 TB of data.
+
+Compute: If your ingestion process takes 3 hours, you’ll be billed for the DBUs and VM costs for those 3 hours, separate from your storage costs.
+In the estimate, I could see there is a reservation for the compute too Read
+That is right, Azure Databricks also offers reserved capacity for compute resources, which can help you save on costs by committing to a certain amount of Databricks Units (DBUs) for a one-year or three-year term. This is separate from the storage reserved capacity.
+Also, do I need to invest in a separate platform team to manage and support databricks ? Read
+I mean like a platform support vendor Read
+Yes, there are several vendors that specialize in providing platform support for Azure Databricks. These vendors can help manage, optimize, and support your Databricks environment, allowing your team to focus on core business activities. This can be beneficial, but it’s not strictly necessary.
+since it is a SAAS, do you think platform team is needed ? Read
+Also, if some externall application like tableau or power bi consumers data from databricks. will it incur costs too ? Read
+Azure Databricks, being a SaaS (Software as a Service) offering, does handle much of the infrastructure management for you. This reduces the need for a large, dedicated platform team.
+in what scenarios do you think platform support would be required ? Read
+Yes, using external applications like Tableau or Power BI to consume data from Azure Databricks will incur additional costs.
+That also comes within the fixed reservation costs ? Read
+Platform support for Azure Databricks might be required in several scenarios, including:
+
+Cluster Management Issues: Problems with starting, stopping, or scaling clusters, or issues related to cluster performance and configuration.
+
+Data Connectivity Problems: Difficulties in connecting to data sources such as Azure Data Lake Storage, SQL databases, or other external data sources.
+
+Security and Access Control: Issues with setting up or managing security configurations, such as integrating with Azure Active Directory, managing user permissions, or configuring network security.
+
+Performance Optimization: Need for assistance in optimizing the performance of Spark jobs, tuning queries, or improving overall system performance.
+
+Integration with Other Services: Challenges in integrating Databricks with other Azure services like Azure Synapse Analytics, Azure Machine Learning, or third-party tools.
+
+Error Troubleshooting: Encountering specific error messages or unexpected behavior that requires expert analysis and resolution.
+
+Upgrades and Maintenance: Assistance with upgrading Databricks runtime versions, applying patches, or performing routine maintenance tasks.
+
+Custom Solutions and Use Cases: Support for implementing custom solutions, such as machine learning models, real-time analytics, or complex ETL pipelines.
+Platform support would be completely separate from the reservation cost
+Upgrades and Maintenance: ? Read
+I thought SAAS would take care of it by itself Read
+You’re right! As a SaaS (Software as a Service) platform, Azure Databricks does handle most of the upgrades and maintenance tasks automatically. This includes updating the Databricks runtime, applying security patches, and ensuring the overall health of the service.
+
+However, there are still some aspects where you might need to be involved or seek support like
+
+Custom Configurations: If you have specific configurations or custom integrations, you might need to ensure they remain compatible with new updates.
+
+Testing: Before applying major updates, you might want to test them in a staging environment to ensure they don’t disrupt your workflows.
+
+Monitoring: Keeping an eye on performance metrics and logs to ensure that updates haven’t introduced any issues.
+
+User Training: Ensuring that your team is aware of new features or changes that come with updates.
+Would you like to start creating an account in Azure. I just need to get your complete name and email address that you would like to use for your account in Azure.
+What about disaster recovery option ? Read
+How do you support disaster recovery in azure ? Read
+We can start with the free trial to get the $200 credits and then you can upgrade it to pay go if the credits are not enough
+Please give me sometime.. I would like to clear my doubts before investing Read
+its not about free...but I need clarity Read
+Azure provides robust disaster recovery options to ensure business continuity in case of unexpected events. Here are some key components and strategies:
+
+Azure Site Recovery (ASR): This service replicates workloads running on physical and virtual machines (VMs) from a primary site to a secondary location. In the event of a disruption, you can failover to the secondary site and continue operations with minimal downtime.
+
+Azure Backup: This service offers a simple, secure, and cost-effective solution to back up your data to the Azure cloud. It supports various workloads, including Azure VMs, SQL databases, and on-premises servers.
+does any cost is associated with it ? Read
+You can get more information by going to this page Disaster recovery overview for Microsoft Azure products and services | Microsoft Learn
+Yes, those a re different services in Azure
+for databricks, is there any specific DR or it is done by azure ? Read
+Azure Databricks has specific disaster recovery (DR) strategies that you can implement, in addition to the general Azure DR capabilities. You can check the guide below for more information
+Regional disaster recovery for Azure Databricks | Microsoft Learn
+for disaster recovery offered by Databricks , is there any cost involved or it comes with the package ? Read
+Disaster recovery (DR) for Azure Databricks involves some additional costs beyond the standard package.
+Let me provide you the key components that might incur extra charges:
+
+Multiple Workspaces: Setting up multiple Databricks workspaces in different regions for DR purposes will incur additional costs for each workspace.
+
+Geo-Redundant Storage: Using geo-redundant storage to ensure data durability across regions can be more expensive than standard storage options.
+
+Data Replication: Tools and processes for replicating data across regions, such as Delta Deep Clone, might involve additional compute and storage costs.
+
+Compute Resources: Any additional compute resources required for maintaining DR environments, such as standby clusters, will also add to the overall cost.
+
+Regional disaster recovery for Azure Databricks | Microsoft Learn
