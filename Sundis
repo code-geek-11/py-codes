@@ -1,0 +1,75 @@
+import pyodbc
+
+# Define your SQL Server connection parameters
+server = 'your_server_name'
+database = 'your_database_name'
+username = 'your_username'
+password = 'your_password'
+
+# Create a connection string
+connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+
+# Connect to SQL Server
+conn = pyodbc.connect(connection_string)
+cursor = conn.cursor()
+
+try:
+    # Find the schedule ID for the schedule named 'sunday_run'
+    cursor.execute("""
+        SELECT schedule_id
+        FROM msdb.dbo.sysschedules
+        WHERE name = 'sunday_run'
+    """)
+    schedule_id = cursor.fetchone()
+
+    if schedule_id:
+        schedule_id = schedule_id[0]
+
+        # Find the job_id for the job named 'autotrial'
+        cursor.execute("""
+            SELECT job_id
+            FROM msdb.dbo.sysjobs
+            WHERE name = 'autotrial'
+        """)
+        job_id = cursor.fetchone()
+
+        if job_id:
+            job_id = job_id[0]
+
+            # Find the job schedule association
+            cursor.execute("""
+                SELECT job_id, schedule_id
+                FROM msdb.dbo.sysjobschedules
+                WHERE job_id = ? AND schedule_id = ?
+            """, (job_id, schedule_id))
+            job_schedule = cursor.fetchone()
+
+            if job_schedule:
+                # Disable the schedule for the job
+                cursor.execute("""
+                    EXEC msdb.dbo.sp_update_jobschedule
+                        @job_id = ?, 
+                        @schedule_id = ?, 
+                        @enabled = 0
+                """, (job_id, schedule_id))
+                
+                print("Schedule disabled successfully.")
+            else:
+                print("No schedule association found for the job.")
+
+        else:
+            print("Job 'autotrial' not found.")
+
+    else:
+        print("Schedule 'sunday_run' not found.")
+
+    # Commit the changes
+    conn.commit()
+
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+finally:
+    # Close the connection
+    cursor.close()
+    conn.close()
