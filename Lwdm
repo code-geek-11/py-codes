@@ -1,0 +1,24 @@
+from datetime import datetime, timedelta
+
+def get_last_working_day(year, month):
+    # Get the last day of the month
+    last_day = datetime(year, month + 1, 1) - timedelta(days=1)
+    
+    # Check if the last day is a weekend and adjust if necessary
+    while last_day.weekday() >= 5:  # 5 is Saturday, 6 is Sunday
+        last_day -= timedelta(days=1)  # Move back one day
+    
+    return last_day
+
+# Get the current date
+now = datetime.now()
+year = now.year
+month = now.month
+
+# Get the last working day of the current month
+last_working_day = get_last_working_day(year, month)
+
+# Format the date
+formatted_date = last_working_day.strftime('%Y-%m-%d')
+
+print(formatted_date)
