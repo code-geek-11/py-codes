@@ -1,0 +1,20 @@
+import win32com.client as win32
+
+# Initialize Word application
+word_app = win32.Dispatch('Word.Application')
+word_app.Visible = False  # Keep Word hidden, set to True if you want to see the process
+
+# Open the Word document
+doc = word_app.Documents.Open(r'path\to\your\document.docm')  # .docm is for macro-enabled documents
+
+# Run the 'clearCheckBoxes' macro
+doc.Application.Run('clearCheckBoxes')
+
+# Save and close the document
+doc.Save()
+doc.Close()
+
+# Quit the Word application
+word_app.Quit()
+
+print("The macro 'clearCheckBoxes' has been executed successfully.")
