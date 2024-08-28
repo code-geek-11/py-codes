@@ -1,0 +1,17 @@
+import win32com.client as win32
+
+# Initialize the Outlook application
+outlook = win32.Dispatch('outlook.application')
+mail = outlook.CreateItem(0)  # 0: Mail item
+
+# Configure the email parameters
+mail.To = 'recipient_email@domain.com'
+mail.Subject = 'Subject of the Email'
+mail.Body = 'This is the body of the email.'
+
+# Send the email
+try:
+    mail.Send()
+    print("Email sent successfully!")
+except Exception as e:
+    print(f"Error: {e}")
