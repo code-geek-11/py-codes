@@ -1,0 +1,21 @@
+from datetime import datetime, timedelta
+
+def get_last_day_of_month(year, month):
+    # Get the first day of the next month
+    first_day_of_next_month = datetime(year, month + 1, 1)
+    # Subtract one day to get the last day of the current month
+    last_day_of_month = first_day_of_next_month - timedelta(days=1)
+    return last_day_of_month
+
+# Get the current date
+now = datetime.now()
+year = now.year
+month = now.month
+
+# Get the last day of the current month
+last_day = get_last_day_of_month(year, month)
+
+# Format the date
+formatted_date = last_day.strftime('%Y-%m-%d')
+
+print(formatted_date)
