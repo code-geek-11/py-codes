@@ -1,0 +1,84 @@
+import requests
+import xml.etree.ElementTree as ET
+
+# Tableau server info
+server = 'https://your-tableau-server.com'
+api_version = '3.17'
+username = 'your-username'
+password = 'your-password'
+site_id = ''  # leave blank for the default site
+project_id = 'your-project-id'
+workbook_id = 'your-workbook-id'
+new_batch_date = '2024-01-08'  # New batch date in yyyy-mm-dd format
+
+# Sign in to Tableau Server
+def sign_in():
+    url = f"{server}/api/{api_version}/auth/signin"
+    payload = {
+        'credentials': {
+            'name': username,
+            'password': password,
+            'site': {'contentUrl': site_id}
+        }
+    }
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()['credentials']['token']
+
+# Download workbook
+def download_workbook(auth_token):
+    url = f"{server}/api/{api_version}/sites/{site_id}/workbooks/{workbook_id}/content"
+    headers = {'X-Tableau-Auth': auth_token}
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    
+    # Save the workbook locally
+    workbook_path = 'workbook.twbx'
+    with open(workbook_path, 'wb') as file:
+        file.write(response.content)
+    return workbook_path
+
+# Modify batch date parameter
+def modify_parameter(workbook_path):
+    # Extract the twb file (if it's a .twbx file)
+    # Assuming the workbook is .twbx, you need to unzip and access the twb inside
+    import zipfile
+    with zipfile.ZipFile(workbook_path, 'r') as z:
+        z.extractall('workbook')
+
+    # Parse the .twb file and modify the batch date parameter
+    twb_path = 'workbook/your-workbook.twb'
+    tree = ET.parse(twb_path)
+    root = tree.getroot()
+    
+    # Find the parameter and modify the value
+    for parameter in root.findall(".//column[@datatype='date']"):  # Assuming it's a date parameter
+        if parameter.attrib.get('name') == 'batch date':
+            parameter.find(".//current-value").text = new_batch_date
+    
+    # Save the modified twb file
+    tree.write(twb_path)
+
+# Publish the modified workbook back to Tableau
+def publish_workbook(auth_token):
+    url = f"{server}/api/{api_version}/sites/{site_id}/workbooks"
+    headers = {'X-Tableau-Auth': auth_token}
+    files = {
+        'request_payload': ('', '<tsRequest><workbook name="modified-workbook-name" projectId="{project_id}" /></tsRequest>', 'text/xml'),
+        'tableau_workbook': ('workbook.twbx', open('workbook.twbx', 'rb'), 'application/octet-stream')
+    }
+    
+    response = requests.post(url, headers=headers, files=files)
+    response.raise_for_status()
+    return response.json()
+
+# Main workflow
+try:
+    token = sign_in()
+    workbook_path = download_workbook(token)
+    modify_parameter(workbook_path)
+    publish_workbook(token)
+    print("Workbook published successfully with updated batch date.")
+except Exception as e:
+    print(f"Failed to update parameter: {e}")
