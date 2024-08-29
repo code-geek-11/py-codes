@@ -1,0 +1,16 @@
+import win32com.client
+
+def pin_to_quick_access(folder_path):
+    shell = win32com.client.Dispatch("Shell.Application")
+    folder = shell.Namespace(folder_path)
+    
+    if folder is not None:
+        folder_item = folder.Self
+        folder_item.InvokeVerb("pintohome")  # The verb to pin the folder to Quick Access
+        print(f"'{folder_path}' has been pinned to Quick Access.")
+    else:
+        print(f"Folder '{folder_path}' not found.")
+
+# Replace with the folder you want to pin
+folder_to_pin = r"C:\Path\To\Your\Folder"
+pin_to_quick_access(folder_to_pin)
