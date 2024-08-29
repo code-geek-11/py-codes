@@ -1,0 +1,28 @@
+import os
+import subprocess
+
+# Base path and new folder name
+base_path = "C:\\Users\\YourUser\\Documents"
+new_folder = "MyNewFolder"
+
+# Combine to get the full directory path
+directory_path = os.path.join(base_path, new_folder)
+
+# Create the directory
+os.makedirs(directory_path, exist_ok=True)
+
+print(f"Directory created at {directory_path}")
+
+# PowerShell command to pin folder to Quick Access
+powershell_command = f'''
+$folderPath = "{directory_path}"
+$shell = New-Object -ComObject shell.application
+$folder = $shell.Namespace((Get-Item -LiteralPath $folderPath).Parent.FullName)
+$folderItem = $folder.ParseName((Get-Item -LiteralPath $folderPath).Name)
+$shell.NameSpace("shell:::{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}").Self.InvokeVerb("Pin to Home")
+'''
+
+# Run the PowerShell script through Python
+subprocess.run(["powershell", "-Command", powershell_command], shell=True, check=True)
+
+print(f"Folder '{directory_path}' pinned to Quick Access!")
