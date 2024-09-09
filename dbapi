@@ -1,0 +1,9 @@
+import mlflow
+import mlflow.sklearn
+
+# Assuming your model is stored in a variable `model`
+mlflow.sklearn.log_model(model, "my_model")
+
+# Register the model in MLflow Model Registry
+model_uri = "runs:/<run-id>/my_model"
+mlflow.register_model(model_uri, "MyModel")
