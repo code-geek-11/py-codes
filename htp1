@@ -1,0 +1,40 @@
+from flask import Flask, request, jsonify, render_template
+import requests
+
+app = Flask(__name__)
+
+# Render the HTML form
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# Handle form submission and API query
+@app.route('/query', methods=['POST'])
+def query_api():
+    # Get JSON request data from the frontend
+    form_data = request.get_json()
+
+    # Replace with your actual API endpoint
+    api_url = 'https://your-insurance-api.com/query'
+    
+    # Set headers for the API request (replace with appropriate headers)
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer your-api-key'
+    }
+
+    try:
+        # Send request to the insurance API
+        response = requests.post(api_url, json=form_data, headers=headers)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+
+        # Parse the API response (assumed to be 'Bind' or 'Not Bind')
+        api_result = response.json().get('status', 'Unknown')  # Adjust according to your API response structure
+
+        return jsonify(api_result)  # Return the result as JSON
+
+    except requests.exceptions.RequestException as e:
+        return str(e), 500  # Return the error as a string with a 500 status code if something goes wrong
+
+if __name__ == '__main__':
+    app.run(debug=True)
