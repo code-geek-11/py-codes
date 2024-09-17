@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance API Query</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding: 50px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-control {
+            height: 45px;
+        }
+        button {
+            width: 100%;
+            height: 50px;
+            font-size: 18px;
+        }
+        .response {
+            margin-top: 30px;
+        }
+        .alert {
+            display: none;
+        }
+        .spinner-border {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Query Insurance API</h1>
+    
+    <form id="insuranceForm">
+        <!-- Input fields -->
+        <div class="form-group">
+            <label for="quotenumber">Quote Number</label>
+            <input type="text" class="form-control" id="quotenumber" placeholder="Enter quote number" required>
+        </div>
+
+        <div class="form-group">
+            <label for="channel">Channel</label>
+            <input type="text" class="form-control" id="channel" placeholder="Enter channel" required>
+        </div>
+
+        <div class="form-group">
+            <label for="allowMarketing">Allow Marketing</label>
+            <select class="form-control" id="allowMarketing" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="autoRenewal">Auto Renewal</label>
+            <select class="form-control" id="autoRenewal" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="buildingName">Building Name</label>
+            <input type="text" class="form-control" id="buildingName" placeholder="Enter building name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="buildingsSumInsured">Buildings Sum Insured</label>
+            <input type="number" class="form-control" id="buildingsSumInsured" placeholder="Enter sum insured" required>
+        </div>
+
+        <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" class="form-control" id="city" placeholder="Enter city" required>
+        </div>
+
+        <div class="form-group">
+            <label for="county">County</label>
+            <input type="text" class="form-control" id="county" placeholder="Enter county" required>
+        </div>
+
+        <div class="form-group">
+            <label for="buildingsFireFlag">Buildings Fire Flag</label>
+            <select class="form-control" id="buildingsFireFlag" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="buildingsFloodFlag">Buildings Flood Flag</label>
+            <select class="form-control" id="buildingsFloodFlag" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="contentsFloodFlag">Contents Flood Flag</label>
+            <select class="form-control" id="contentsFloodFlag" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="correspondenceEirCode">Correspondence EirCode</label>
+            <input type="text" class="form-control" id="correspondenceEirCode" placeholder="Enter EirCode" required>
+        </div>
+
+        <div class="form-group">
+            <label for="customerType">Customer Type</label>
+            <input type="text" class="form-control" id="customerType" placeholder="Enter customer type" required>
+        </div>
+
+        <div class="form-group">
+            <label for="occGrp">Occupation Group (OccGrp)</label>
+            <input type="text" class="form-control" id="occGrp" placeholder="Enter occupation group" required>
+        </div>
+
+        <div class="form-group">
+            <label for="jbaRAGScoreColor">JBA RAG Score Color</label>
+            <input type="text" class="form-control" id="jbaRAGScoreColor" placeholder="Enter RAG score color" required>
+        </div>
+
+        <div class="form-group">
+            <label for="marketBasket">Market Basket</label>
+            <input type="text" class="form-control" id="marketBasket" placeholder="Enter market basket" required>
+        </div>
+
+        <div class="form-group">
+            <label for="mta_done">MTA Done</label>
+            <select class="form-control" id="mta_done" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="mta_probability">MTA Probability</label>
+            <input type="number" class="form-control" id="mta_probability" step="0.01" min="0" max="1" placeholder="Enter MTA probability" required>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-lg">Query API</button>
+
+        <!-- Loading spinner -->
+        <div class="spinner-border text-primary mt-3" id="loadingSpinner" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </form>
+
+    <!-- Response section -->
+    <div class="response mt-4">
+        <div class="alert alert-success" id="successMessage">API Response: <strong>Bind</strong></div>
+        <div class="alert alert-danger" id="errorMessage"></div>
+    </div>
+</div>
+
+<!-- Bootstrap and JavaScript dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Handle form submission via AJAX
+    document.getElementById('insuranceForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Show the loading spinner
+        document.getElementById('loadingSpinner').style.display = 'inline-block';
+        
+        // Clear any previous messages
+        document.getElementById('successMessage').style.display = 'none';
+        document.getElementById('errorMessage').style.display = 'none';
+        
+        // Collect form data
+        const formData = {
+            quotenumber: document.getElementById('quotenumber').value,
+            channel: document.getElementById('channel').value,
+            allowMarketing: document.getElementById('allowMarketing').value,
+            autoRenewal: document.getElementById('autoRenewal').value,
+            buildingName: document.getElementById('buildingName').value,
+            buildingsSumInsured: document.getElementById('buildingsSumInsured').value,
+            city: document.getElementById('city').value,
+            county: document.getElementById('county').value,
+            buildingsFireFlag: document.getElementById('buildingsFireFlag').value,
+            buildingsFloodFlag: document.getElementById('buildingsFloodFlag').value,
+            contentsFloodFlag: document.getElementById('contentsFloodFlag').value,
+            correspondenceEirCode: document.getElementById('correspondenceEirCode').value,
+            customerType: document.getElementById('customerType').value,
+            occGrp: document.getElementById('occGrp').value,
+            jbaRAGScoreColor: document.getElementById('jbaRAGScoreColor').value,
+            marketBasket: document.getElementById('marketBasket').value,
+            mta_done: document.getElementById('mta_done').value,
+            mta_probability: document.getElementById('mta_probability').value,
+        };
+
+        // Send AJAX request to the Flask API
+        $.ajax({
+            url: '/query',  // Flask endpoint
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                // Hide spinner and show success message
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('successMessage').innerHTML = 'API Response: <strong>' + response + '</strong>';
+            },
+            error: function(error) {
+                // Hide spinner and show error message
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorMessage').textContent = 'Error querying the API: ' + error.responseText;
+            }
+        });
+    });
+</script>
+</body>
+</html>
