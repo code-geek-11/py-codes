@@ -1,0 +1,87 @@
+from flask import Flask, request, jsonify, render_template
+import requests
+
+app = Flask(__name__)
+
+# Route to render the HTML form
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# Route to handle form submission and send raw JSON to the insurance API
+@app.route('/query', methods=['POST'])
+def query_api():
+    # Get JSON request data from the frontend
+    form_data = request.get_json()
+
+    # Construct the raw JSON payload in the required format
+    payload = {
+        "dataframe_split": {
+            "columns": [
+                "quotenumber",
+                "channel",
+                "allowMarketing",
+                "autoRenewal",
+                "buildingName",
+                "buildingsSumInsured",
+                "city",
+                "county",
+                "buildingsFireFlag",
+                "buildingsFloodFlag",
+                "contentsFloodFlag",
+                "correspondenceEirCode",
+                "customerType",
+                "occGrp",
+                "jbaRAGScoreColor",
+                "marketBasket",
+                "mta_done",
+                "mta_probability"
+            ],
+            "data": [
+                [
+                    form_data['quotenumber'],
+                    form_data['channel'],
+                    form_data['allowMarketing'],
+                    form_data['autoRenewal'],
+                    form_data['buildingName'],
+                    form_data['buildingsSumInsured'],
+                    form_data['city'],
+                    form_data['county'],
+                    form_data['buildingsFireFlag'],
+                    form_data['buildingsFloodFlag'],
+                    form_data['contentsFloodFlag'],
+                    form_data['correspondenceEirCode'],
+                    form_data['customerType'],
+                    form_data['occGrp'],
+                    form_data['jbaRAGScoreColor'],
+                    form_data['marketBasket'],
+                    form_data['mta_done'],
+                    form_data['mta_probability']
+                ]
+            ]
+        }
+    }
+
+    # Insurance API endpoint (replace with the actual URL)
+    api_url = 'https://your-insurance-api.com/query'
+    
+    # Set the appropriate headers for the external API request (e.g., Content-Type, Authorization)
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer your-api-key'  # Example for API authentication
+    }
+
+    try:
+        # Send the constructed JSON data to the insurance API
+        response = requests.post(api_url, json=payload, headers=headers)
+        response.raise_for_status()  # Raise an error for bad responses (4xx or 5xx)
+
+        # Return the result from the insurance API to the frontend
+        return jsonify(response.json())  # Returning the JSON response from the API
+
+    except requests.exceptions.RequestException as e:
+        # Return an error message if the request fails
+        return str(e), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
