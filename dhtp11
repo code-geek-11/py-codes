@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Quote - ML Predictions</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9f1f7;
+            padding: 50px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #333;
+        }
+        .form-row {
+            margin-bottom: 20px;
+        }
+        .form-control {
+            height: 45px;
+            transition: border-color 0.3s;
+            border-radius: 25px;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        label {
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        button {
+            height: 50px;
+            font-size: 18px;
+            border-radius: 25px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .response {
+            margin-top: 30px;
+        }
+        .alert {
+            display: none;
+        }
+        .light {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 10px;
+            opacity: 0.3;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .blinking {
+            animation: blink 1s infinite;
+        }
+        .premium-box {
+            margin-top: 20px;
+        }
+        .premium-box input {
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid #007bff;
+            border-radius: 25px;
+        }
+        .horizontal-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+        }
+        .lights {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .response-box {
+            margin-top: 30px;
+        }
+        .tall-textbox {
+            height: 90px;
+            border: 2px solid #007bff;
+            border-radius: 25px;
+            transition: border-color 0.3s;
+        }
+        .rounded-button {
+            border-radius: 25px;
+            height: 90px;
+        }
+        .card {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Insurance Quote - ML Predictions</h1>
+
+    <form id="insuranceForm">
+        <div class="card">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="Policy_Level_Excess">Policy Level Excess</label>
+                    <select class="form-control" id="Policy_Level_Excess" name="Policy_Level_Excess" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Package">Package</label>
+                    <select class="form-control" id="Package" name="Package" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Buildings_SI">Buildings SI</label>
+                    <input type="text" class="form-control" id="Buildings_SI" name="Buildings_SI" placeholder="Enter Buildings SI" required>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Channel">Channel</label>
+                    <select class="form-control" id="Channel" name="Channel" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Competing_Insurer">Competing Insurer</label>
+                    <select class="form-control" id="Competing_Insurer" name="Competing_Insurer" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Broker_Name">Broker Name</label>
+                    <select class="form-control" id="Broker_Name" name="Broker_Name" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="Branch_Name">Branch Name</label>
+                    <select class="form-control" id="Branch_Name" name="Branch_Name" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Burglar_Alarm_Description">Burglar Alarm</label>
+                    <select class="form-control" id="Burglar_Alarm_Description" name="Burglar_Alarm_Description" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Heating_System_Description">Heating System</label>
+                    <select class="form-control" id="Heating_System_Description" name="Heating_System_Description" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Home_Type_Description">Home Type</label>
+                    <select class="form-control" id="Home_Type_Description" name="Home_Type_Description" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Home_Use_Description">Home Use</label>
+                    <select class="form-control" id="Home_Use_Description" name="Home_Use_Description" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Number_of_Bathrooms">Number of Bathrooms</label>
+                    <select class="form-control" id="Number_of_Bathrooms" name="Number_of_Bathrooms" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="Number_of_Bedrooms">Number of Bedrooms</label>
+                    <select class="form-control" id="Number_of_Bedrooms" name="Number_of_Bedrooms" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Roof_felt">Roof Felt</label>
+                    <select class="form-control" id="Roof_felt" name="Roof_felt" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Standard_Construction">Standard Construction</label>
+                    <select class="form-control" id="Standard_Construction" name="Standard_Construction" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Building_Age">Building Age</label>
+                    <select class="form-control" id="Building_Age" name="Building_Age" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Customer_Type">Customer Type</label>
+                    <select class="form-control" id="Customer_Type" name="Customer_Type" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Occupation">Occupation</label>
+                    <select class="form-control" id="Occupation" name="Occupation" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="Occupation_Group">Occupation Group</label>
+                    <select class="form-control" id="Occupation_Group" name="Occupation_Group" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Market_Basket">Market Basket</label>
+                    <select class="form-control" id="Market_Basket" name="Market_Basket" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Strategy">Strategy</label>
+                    <select class="form-control" id="Strategy" name="Strategy" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Document_Channel">Document Channel</label>
+                    <select class="form-control" id="Document_Channel" name="Document_Channel" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Affluence_Average_Income">Average Income</label>
+                    <input type="text" class="form-control" id="Affluence_Average_Income" name="Affluence_Average_Income" placeholder="Enter Average Income" required>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="Affluence_Income_Range">Income Range</label>
+                    <select class="form-control" id="Affluence_Income_Range" name="Affluence_Income_Range" required>
+                        <option value="">Select</option>
+                        <!-- Add your options here -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row label-row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center">
+                    <label>Bind Probability</label>
+                </div>
+                <div class="col-md-3 text-center">
+                    <label>Probable Premium Value</label>
+                </div>
+            </div>
+
+            <div class="form-row horizontal-group">
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Predict</button>
+                </div>
+                <div class="col-md-6 lights text-center">
+                    <div class="light" id="greenLight" style="background-color: green;"></div>
+                    <div class="light" id="redLight" style="background-color: red;"></div>
+                </div>
+                <div class="col-md-3 premium-box">
+                    <input type="text" id="premiumValue" class="form-control" placeholder="" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="response-box card">
+            <div class="form-group">
+                <label for="additionalResponse">More help needed ?</label>
+                <div class="input-group">
+                    <input type="text" id="additionalResponse" class="form-control tall-textbox" placeholder="GEN AI Response will be displayed here..." readonly>
+                    <div class="input-group-append">
+                        <button type="button" id="queryAdditionalEndpoint" class="btn btn-info rounded-button">Click me for help!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $('#insuranceForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        document.getElementById('greenLight').classList.remove('blinking');
+        document.getElementById('redLight').classList.remove('blinking');
+        document.getElementById('premiumValue').value = '';
+
+        const formData = {
+            Policy_Level_Excess: $('#Policy_Level_Excess').val(),
+            Package: $('#Package').val(),
+            Buildings_SI: $('#Buildings_SI').val(),
+            Channel: $('#Channel').val(),
+            Competing_Insurer: $('#Competing_Insurer').val(),
+            Broker_Name: $('#Broker_Name').val(),
+            Branch_Name: $('#Branch_Name').val(),
+            Burglar_Alarm_Description: $('#Burglar_Alarm_Description').val(),
+            Heating_System_Description: $('#Heating_System_Description').val(),
+            Home_Type_Description: $('#Home_Type_Description').val(),
+            Home_Use_Description: $('#Home_Use_Description').val(),
+            Number_of_Bathrooms: $('#Number_of_Bathrooms').val(),
+            Number_of_Bedrooms: $('#Number_of_Bedrooms').val(),
+            Roof_felt: $('#Roof_felt').val(),
+            Standard_Construction: $('#Standard_Construction').val(),
+            Building_Age: $('#Building_Age').val(),
+            Customer_Type: $('#Customer_Type').val(),
+            Occupation: $('#Occupation').val(),
+            Occupation_Group: $('#Occupation_Group').val(),
+            Market_Basket: $('#Market_Basket').val(),
+            Strategy: $('#Strategy').val(),
+            Document_Channel: $('#Document_Channel').val(),
+            Affluence_Average_Income: $('#Affluence_Average_Income').val(),
+            Affluence_Income_Range: $('#Affluence_Income_Range').val()
+        };
+
+        $.ajax({
+            url: '/query',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.toLowerCase() === 'bind') {
+                    $('#greenLight').addClass('blinking');
+                    $('#redLight').removeClass('blinking');
+                } else if (response.toLowerCase() === 'decline') {
+                    $('#redLight').addClass('blinking');
+                    $('#greenLight').removeClass('blinking');
+                }
+
+                fetchPremiumValue(formData.Buildings_SI);
+            },
+            error: function(error) {
+                console.error('Error querying the API: ', error);
+            }
+        });
+    });
+
+    function fetchPremiumValue(buildingsSI) {
+        $.ajax({
+            url: '/premium',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ buildingsSI: buildingsSI }),
+            success: function(premiumResponse) {
+                $('#premiumValue').val(premiumResponse.premium);
+            },
+            error: function(error) {
+                console.error('Error fetching premium value: ', error);
+            }
+        });
+    }
+
+    $('#queryAdditionalEndpoint').on('click', function() {
+        const bindProbability = $('#greenLight').hasClass('blinking') ? 'Bind' : 'Decline';
+        const probablePremium = $('#premiumValue').val();
+
+        const additionalData = {
+            Buildings_SI: $('#Buildings_SI').val(),
+            bindProbability: bindProbability,
+            probablePremium: probablePremium
+        };
+
+        $.ajax({
+            url: '/additional-endpoint',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(additionalData),
+            success: function(response) {
+                $('#additionalResponse').val(response.message);
+            },
+            error: function(error) {
+                console.error('Error querying additional endpoint: ', error);
+            }
+        });
+    });
+</script>
+</body>
+</html>
