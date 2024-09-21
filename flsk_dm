@@ -1,0 +1,43 @@
+from flask import Flask, request, jsonify, render_template
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/query', methods=['POST'])
+def query():
+    data = request.get_json()
+    
+    # Example logic for bind/decline decision
+    # Replace this with your actual logic
+    if int(data['Buildings_SI']) > 100000:  # Dummy condition for example
+        return 'Bind'
+    else:
+        return 'Decline'
+
+@app.route('/premium', methods=['POST'])
+def premium():
+    data = request.get_json()
+    
+    # Example premium calculation
+    buildings_si = int(data['buildingsSI'])
+    premium_value = buildings_si * 0.02  # Dummy calculation (2% of SI)
+    
+    return jsonify({'premium': f"{premium_value:.2f}"})
+
+@app.route('/additional-endpoint', methods=['POST'])
+def additional_endpoint():
+    data = request.get_json()
+    
+    # Here you could perform some additional logic or calculations
+    bind_probability = data['bindProbability']
+    probable_premium = data['probablePremium']
+    
+    response_message = f"Received {bind_probability} with a premium of {probable_premium}"
+    
+    return jsonify({'message': response_message})
+
+if __name__ == '__main__':
+    app.run(debug=True)
