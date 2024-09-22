@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textarea Size Matching Input</title>
+    <style>
+        .tall-textbox {
+            height: 38px; /* Match the height of the original input box */
+            width: 100%; /* Match the width of the original input box */
+            padding: 6px 12px; /* Match the padding of the original input box */
+            box-sizing: border-box; /* Ensures padding and border don't affect the width */
+            font-size: 14px; /* Match the font-size of the input box */
+            border: 1px solid #ccc; /* Match the border style */
+            border-radius: 4px; /* Match the border radius of the input */
+            overflow: hidden; /* Ensures no overflow */
+            resize: none; /* Disable resizing */
+            line-height: 1.42857143; /* Same line height as input */
+        }
+
+        /* Optional: If you want to match the placeholder style */
+        .tall-textbox::placeholder {
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+    <textarea id="additionalResponse" class="form-control tall-textbox" placeholder="GEN AI Response will be displayed here..." readonly></textarea>
+
+</body>
+</html>
