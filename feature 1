@@ -1,0 +1,106 @@
+Feature Assessment and Potential Business Rules
+
+    Policy_Level_Excess:
+        Description: Deductible amount the policyholder is willing to pay before insurance coverage kicks in.
+        Impact: Higher deductibles often indicate lower risk to insurers (more likely to bind), while very low deductibles may increase the likelihood of decline if perceived as high risk.
+        Potential Rule: Declined if deductible is below a certain threshold.
+
+    Package:
+        Description: Insurance package type (e.g., basic, standard, premium).
+        Impact: Premium packages might have stricter underwriting criteria, leading to more declines if certain conditions aren't met.
+        Potential Rule: Decline if high-value package conditions are not met.
+
+    Buildings_SI (Sum Insured):
+        Description: The amount of coverage for the building structure.
+        Impact: High coverage amounts might trigger declines if perceived as high risk or under high-value home conditions.
+        Potential Rule: Decline if SI exceeds a certain amount without additional requirements.
+
+    Channel:
+        Description: Distribution channel through which the quote is generated (e.g., online, broker, direct).
+        Impact: Certain channels might be associated with higher risk, such as direct or online channels.
+        Potential Rule: Decline if the quote is from a high-risk channel.
+
+    Competing_Insurer:
+        Description: Indicates whether a competing insurer has provided a quote.
+        Impact: Could indicate price-sensitive customers; quotes might be declined if competing policies are seen as risky.
+        Potential Rule: Decline if the competitor's risk assessment triggers concerns.
+
+    Broker_Name:
+        Description: Name of the broker handling the quote.
+        Impact: Brokers with high decline rates or poor historical performance might influence the decision.
+        Potential Rule: Decline if broker historically submits high-risk quotes.
+
+    Branch_Name:
+        Description: The branch handling the policy.
+        Impact: Certain branches may have stricter underwriting guidelines.
+        Potential Rule: Decline if handled by branches known for higher risk assessment.
+
+    Burglar_Alarm_Description:
+        Description: Details about the burglar alarm system in place.
+        Impact: Lack of alarms or non-certified systems might increase risk.
+        Potential Rule: Decline if no or inadequate alarm system is present.
+
+    Heating_System_Description:
+        Description: Type of heating system used in the home.
+        Impact: Outdated or risky systems (like old oil heaters) might be red flags.
+        Potential Rule: Decline if the heating system is outdated or high-risk.
+
+    Home_Type_Description:
+        Description: Type of home (e.g., detached, semi-detached, apartment).
+        Impact: Certain home types (like old apartments) may be viewed as higher risk.
+        Potential Rule: Decline if the home type doesn’t meet underwriting criteria.
+
+    Home_Use_Description:
+        Description: Purpose of the home (e.g., primary residence, rental).
+        Impact: Rental or secondary homes may carry higher risks.
+        Potential Rule: Decline if the property is not a primary residence.
+
+    Number_Of_Bathrooms / Number_Of_Bedrooms:
+        Description: Counts of bathrooms and bedrooms in the home.
+        Impact: Larger homes might have more risk factors or higher claims potential.
+        Potential Rule: Decline if home size doesn’t align with income data or property value.
+
+    Roof_felt:
+        Description: Presence of roofing felt or roof type.
+        Impact: Certain roof types (e.g., felt, old tiles) might be high risk.
+        Potential Rule: Decline if the roof is not in good condition or is high-risk.
+
+    Standard_Construction:
+        Description: Whether the home is built using standard construction materials.
+        Impact: Non-standard constructions (like thatch) are higher risk.
+        Potential Rule: Decline if the construction is non-standard.
+
+    Building_Age:
+        Description: Age of the building.
+        Impact: Older buildings often face higher risks of issues like wiring problems, structural concerns.
+        Potential Rule: Decline if the building age exceeds a certain threshold without recent renovations.
+
+    Customer_Type:
+        Description: Type of customer (e.g., new, renewal).
+        Impact: New customers may have higher decline rates compared to renewals due to unknown risk profiles.
+        Potential Rule: Decline for new customers with inadequate history.
+
+    Occupation / Occupation_Group:
+        Description: Customer’s occupation and group classification.
+        Impact: Certain occupations may be considered higher risk.
+        Potential Rule: Decline for occupations associated with higher claims rates.
+
+    Market_Basket:
+        Description: Likely a basket of products/services purchased or intended.
+        Impact: A comprehensive set of policies might reduce perceived risk, whereas limited baskets may increase it.
+        Potential Rule: Decline if not enough products are bundled.
+
+    Strategy:
+        Description: Specific strategy tied to the quote (e.g., growth vs. conservative).
+        Impact: Different strategies may have different risk tolerances.
+        Potential Rule: Decline if strategy does not align with risk appetite.
+
+    Document_Channel:
+        Description: Method of document submission (e.g., online, paper).
+        Impact: Certain channels (like online submissions) might be prone to errors or fraud.
+        Potential Rule: Decline if documents are submitted through a less secure channel.
+
+    Affluence_Average_Income / Affluence_Income_Range:
+        Description: Customer’s income level or range.
+        Impact: Low income may be associated with higher risk if coverage is high relative to income.
+        Potential Rule: Decline if income is not proportional to the insured value.
