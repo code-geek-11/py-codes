@@ -1,0 +1,39 @@
+# Penalty for low sum insured
+if sample['Buldings_SI'] < 80000:
+    score -= 15  # Low sum insured leads to a decline
+
+# Penalty for homes without burglar alarms
+if sample['Burglar_Alarm_Description'] == 'Not Alarmed' or sample['Burglar_Alarm_Description'] == 'Not Provided':
+    score -= 15  # Homes with no burglar alarm are higher risk
+
+# Penalty for older or riskier heating systems
+if sample['Heating_System_Description'] in ['Oil', 'Solid Fuel', 'Geo Thermal']:
+    score -= 10  # Older or riskier heating systems
+
+# Penalty for high-risk home types
+if sample['Home_Type_Description'] in ['Apartment/Flat(Groundfloor)', 'End Terrace Bungalow', '3 or More Storied House']:
+    score -= 10  # Higher risk home types
+
+# Penalty for low affluence income range
+if sample['Affluence_Income_Range'] in ['20', '20-30']:
+    score -= 15  # Low affluence income indicates higher risk
+
+# Penalty for tenants with fewer bedrooms
+if sample['Home_Use_Description'] == 'Rented(Proposer is a tenant)' and sample['Number_Of_Bedrooms'] < 3:
+    score -= 20  # Negative for tenants with fewer bedrooms
+
+# Penalty for non-standard constructions
+if sample['Standard_Construction'] == 'n' and sample['Bulding_Age'] > 50:
+    score -= 20  # Negative for older non-standard constructions
+
+# Penalty for corporate customers
+if sample['Customer_Type'] == 'CORPORATE':
+    score -= 10  # Corporate customers are riskier in general
+
+# Direct decline for very old non-standard buildings
+if sample['Bulding_Age'] > 100 and sample['Standard_Construction'] == 'n':
+    return -100  # Direct decline for very old, non-standard buildings
+
+# Direct decline for corporate customers without burglar alarm
+if sample['Burglar_Alarm_Description'] == 'Not Alarmed' and sample['Customer_Type'] == 'CORPORATE':
+    return -50  # Decline for corporate customers with no alarms
