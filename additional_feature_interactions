@@ -1,0 +1,15 @@
+# Add more negative conditions in score_interactions
+if sample['Buldings_SI'] < 80000:
+    score -= 10  # Low sum insured leads to a negative impact
+    
+if sample['Burglar_Alarm_Description'] == 'Not Alarmed' or sample['Burglar_Alarm_Description'] == 'Not Provided':
+    score -= 15  # Homes with no burglar alarm or missing info are higher risk
+    
+if sample['Heating_System_Description'] in ['Oil', 'Solid Fuel', 'Geo Thermal']:
+    score -= 5  # Older heating systems are less favorable
+    
+if sample['Home_Type_Description'] in ['Apartment/Flat(Groundfloor)', 'End Terrace Bungalow', '3 or More Storied House']:
+    score -= 5  # Certain home types are higher risk
+    
+if sample['Affluence_Income_Range'] in ['20', '20-30']:
+    score -= 10  # Low affluence income indicates higher risk
