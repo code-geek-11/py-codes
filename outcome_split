@@ -1,0 +1,29 @@
+import pandas as pd
+from sklearn.utils import resample
+
+# Load your CSV file into a pandas DataFrame
+df = pd.read_csv('your_file.csv')
+
+# Check the value counts of the 'Outcome' column to see the current distribution
+print(df['Outcome'].value_counts())
+
+# Separate the records by 'Outcome'
+df_bind = df[df['Outcome'] == 'Bind']
+df_decline = df[df['Outcome'] == 'Decline']
+df_review = df[df['Outcome'] == 'Review']
+
+# Resample each outcome to have 10,000 records (if they have fewer than 10,000 records)
+df_bind_resampled = resample(df_bind, replace=True, n_samples=10000, random_state=123)
+df_decline_resampled = resample(df_decline, replace=True, n_samples=10000, random_state=123)
+df_review_resampled = resample(df_review, replace=True, n_samples=10000, random_state=123)
+
+# Combine the resampled dataframes into one
+df_balanced = pd.concat([df_bind_resampled, df_decline_resampled, df_review_resampled])
+
+# Shuffle the dataframe to mix the outcomes
+df_balanced = df_balanced.sample(frac=1, random_state=123).reset_index(drop=True)
+
+# Save the new balanced dataframe to a CSV file
+df_balanced.to_csv('balanced_output.csv', index=False)
+
+print("New CSV file created with 30,000 records and balanced outcome distribution.")
