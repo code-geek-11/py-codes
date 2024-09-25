@@ -1,0 +1,125 @@
+Policy_Level_Excess:
+
+    Sample Values: 250, 350
+    Impact: A lower excess (deductible) means more liability for the insurer, often leading to higher risk assessments.
+    Business Rule: Decline if Policy_Level_Excess < 300 for high-value homes (Buildings_SI > 100,000).
+
+Package:
+
+    Sample Values: 1, 2, 3 (representing different insurance levels or types)
+    Impact: Higher package numbers may imply more coverage or add-ons, leading to stricter underwriting.
+    Business Rule: Decline if Package = 3 and certain conditions (like old heating systems) aren't met.
+
+Buildings_SI (Sum Insured):
+
+    Sample Values: 50,000, 135,000
+    Impact: Higher sums insured require stricter risk assessments.
+    Business Rule: Decline if Buildings_SI > 100,000 without additional security measures (e.g., monitored alarms).
+
+Channel:
+
+    Sample Values: call center, public
+    Impact: Quotes from public channels may have less accurate information or higher fraud risk.
+    Business Rule: Decline if Channel = public without thorough documentation.
+
+Competing_Insurer:
+
+    Sample Values: competitor 1, competitor 2
+    Impact: Competing quotes might suggest price sensitivity, which could indicate higher risk customers.
+    Business Rule: Decline if competing offers are significantly lower without justification.
+
+Broker_Name:
+
+    Sample Values: broker1, broker2
+    Impact: Some brokers might have a history of submitting high-risk clients.
+    Business Rule: Decline if associated with brokers known for high claims ratios.
+
+Branch_Name:
+
+    Sample Values: branch1, branch2
+    Impact: Specific branches might handle riskier portfolios.
+    Business Rule: Decline if associated with branches known for high-risk assessments.
+
+Burglar_Alarm_Description:
+
+    Sample Values: Alarmed, Not Alarmed, Monitored Alarm
+    Impact: Homes without alarms or with basic alarms may have higher burglary risk.
+    Business Rule: Decline if Burglar_Alarm_Description = Not Alarmed for high-value homes.
+
+Heating_System_Description:
+
+    Sample Values: Electric, Oil, Gas
+    Impact: Certain heating systems, like old oil systems, might present higher risk.
+    Business Rule: Decline if Heating_System_Description = Oil and Building_Age > 50.
+
+Home_Type_Description:
+
+    Sample Values: Detached House, Semi-Detached House
+    Impact: Different home types have varied risk profiles, with detached homes generally being more expensive to insure.
+    Business Rule: Decline if Home_Type_Description = Detached and other high-risk factors are present.
+
+Home_Use_Description:
+
+    Sample Values: Main Home (Owner occupied)
+    Impact: Non-owner-occupied homes, like rentals, might have different risk factors.
+    Business Rule: Decline if not owner-occupied or has irregular use patterns.
+
+Number_Of_Bathrooms / Number_Of_Bedrooms:
+
+    Sample Values: 1-5
+    Impact: Larger homes with more bathrooms/bedrooms may be costlier and riskier.
+    Business Rule: Decline if the number of bedrooms is high relative to the income range provided.
+
+Roof_felt:
+
+    Sample Values: Less_20, 20_30, More_30
+    Impact: Older roofs, especially those over 30 years old, may pose a higher risk of claims.
+    Business Rule: Decline if Roof_felt = More_30 without recent renovations.
+
+Standard_Construction:
+
+    Sample Values: y, n
+    Impact: Non-standard construction homes (e.g., timber, thatch) are generally higher risk.
+    Business Rule: Decline if Standard_Construction = n.
+
+Building_Age:
+
+    Sample Values: 10, 50, 123, 76
+    Impact: Older buildings are more prone to structural issues.
+    Business Rule: Decline if Building_Age > 50 without evidence of recent updates.
+
+Customer_Type:
+
+    Sample Values: PERSONAL, CORPORATE
+    Impact: Corporate customers may involve additional risks, such as larger properties or more complex claims.
+    Business Rule: Decline if Customer_Type = CORPORATE without sufficient supporting documents.
+
+Occupation / Occupation_Group:
+
+    Sample Values: Retired, Teacher, Scientist / Retired, Education, Science/Technology
+    Impact: Certain occupations may indicate lower or higher risk (e.g., retired individuals may be seen as lower risk).
+    Business Rule: Decline if occupation is associated with higher risk or irregular income.
+
+Market_Basket:
+
+    Sample Values: Direct, Partnership - KBC
+    Impact: The type of market basket can indicate customer type and associated risk.
+    Business Rule: Decline if Market_Basket = Direct without a secure payment method.
+
+Strategy:
+
+    Sample Values: Common Pricing, Cost Plus
+    Impact: Different strategies reflect the insurer's pricing models and risk appetite.
+    Business Rule: Decline if Strategy = Cost Plus without additional risk mitigations.
+
+Document_Channel:
+
+    Sample Values: Email, Print
+    Impact: Electronic submissions might be less secure or prone to missing details.
+    Business Rule: Decline if Document_Channel = Email and key documents are missing.
+
+Affluence_Average_Income / Affluence_Income_Range:
+
+    Sample Values: 83, 27 / 75-100, 20-30
+    Impact: Income levels help gauge the customer’s ability to maintain the insured property.
+    Business Rule: Decline if income range is low compared to high policy value.
