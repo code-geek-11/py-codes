@@ -1,0 +1,156 @@
+import pandas as pd
+import numpy as np
+
+# Define your feature values
+feature_values = {
+    'Policy_Level_Excess': [250, 350, 500, 1000],
+    'Package': [1, 2, 3],
+    'Buldings_SI': np.random.randint(50000, 150000, 1000),  # Random values for demonstration
+    'Channel': ['callcenter', 'public', 'kbcweb', 'partnership'],
+    'Competing_Insurer': [f'competitor {i}' for i in range(1, 18)],
+    'Broker_Name': ['broker1', 'broker2'],
+    'Branch_Name': [f'branch {i}' for i in range(1, 5)],
+    'Burglar_Alarm_Description': ['Alarmed', 'Not Alarmed', 'Monitored Alarm', 'Not Provided'],
+    'Heating_System_Description': ['Air to Water System', 'Electric', 'Oil', 'Gas', 'Mixture Including Oil', 'Solid Fuel', 'Geo Thermal', 'Woodchip', 'Solar/Wind', 'Unknown', 'Not selected'],
+    'Home_Type_Description': ['Apartment/Flat(Above Groundfloor)', 'Apartment/Flat(Groundfloor)', 'Semi-Detached House', 'Terraced House', 'Detached House', 'Mid Terrace Bungalow', 'Bungalow', 'Maisonette', 'End Terrace House', 'Dormer Bungalow', 'End Terrace Bungalow', '3 or More Storied House', 'Not Selected'],
+    'Home_Use_Description': ['Main Home (Owner occupied)', 'Investment Property(Family)', 'Investment Property(Up to 4 professionals)', 'Rented(Proposer is a tenant)', 'Main Home (Owner occupied) with Partial Letting', 'Holiday Home(With no letting use)', 'Main Home(Owner occupied) with Business use', 'Investment Property (Students)', 'Holiday Home (With letting use)', 'Not selected'],
+    'Number_Of_Bedrooms': [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    'Roof_felt': ['Less_20', '20_30', 'More_30'],
+    'Standard_Construction': ['y', 'n'],
+    'Bulding_Age': np.random.randint(1, 150, 1000),  # Random values for demonstration
+    'Customer_Type': ['PERSONAL', 'CORPORATE'],
+    'Occupation_Group': ['Retired', 'Home-maker', 'Sales(Office/Retail)', 'Unemployed', 'Cleaning', 'Therapeutics & Beauty Services', 'Other', 'Industrial/Manufacturing', 'Transportation', 'Finance Banking and Insurance', 'Science/technology', 'Sales(On Road)', 'Healthcare', 'Hospitality', 'Farming & Agriculture', 'Civil Service', 'Information Technology/Computer Software', 'Construction', 'Education', 'Childcare', 'Sports/Entertainment', 'Student'],
+    'Strategy': ['Common Pricing', 'Cost Plus'],
+    'Document_Channel': ['Email', 'Print'],
+    'Affluence_Income_Range': ['20', '20-30', '30-40', '40-50', '50-60', '60-75', '75-100', '100-150', '150+']
+}
+
+# Define a scoring function for interactions
+def score_interactions(sample):
+    score = 0
+    
+    # Define weights for various conditions based on feature values
+    if sample['Policy_Level_Excess'] >= 500:
+        score += 10
+        
+    if sample['Package'] == 3:
+        score += 5
+
+    if sample['Buldings_SI'] > 100000:
+        score += 5
+    
+    if sample['Channel'] in ['callcenter', 'public']:
+        score += 5
+        
+    if sample['Burglar_Alarm_Description'] == 'Alarmed':
+        score += 10
+        
+    if sample['Heating_System_Description'] in ['Electric', 'Gas']:
+        score += 5
+        
+    if sample['Home_Type_Description'] in ['Detached House', 'Bungalow']:
+        score += 5
+        
+    if sample['Home_Use_Description'] in ['Main Home (Owner occupied)', 'Investment Property(Family)']:
+        score += 10
+
+    if sample['Number_Of_Bedrooms'] > 3:
+        score += 5
+        
+    if sample['Roof_felt'] == 'More_30':
+        score += 5
+        
+    if sample['Standard_Construction'] == 'y':
+        score += 5
+        
+    if sample['Bulding_Age'] < 30:
+        score += 5
+        
+    if sample['Customer_Type'] == 'PERSONAL':
+        score += 5
+        
+    if sample['Occupation_Group'] in ['Retired', 'Healthcare']:
+        score += 5
+        
+    if sample['Strategy'] == 'Common Pricing':
+        score += 5
+        
+    if sample['Document_Channel'] == 'Email':
+        score += 5
+        
+    if sample['Affluence_Income_Range'] in ['75-100', '100-150']:
+        score += 5
+        
+    if sample['Competing_Insurer'] in ['competitor 1', 'competitor 2']:
+        score -= 5  # Negative impact from competing insurers
+
+    # More interactions can be added here
+    if sample['Home_Use_Description'] == 'Rented(Proposer is a tenant)' and sample['Number_Of_Bedrooms'] < 3:
+        score -= 10  # Negative for tenants with fewer bedrooms
+
+    if sample['Standard_Construction'] == 'n' and sample['Bulding_Age'] > 50:
+        score -= 10  # Negative for older non-standard constructions
+
+    if sample['Burglar_Alarm_Description'] == 'Not Alarmed' and sample['Customer_Type'] == 'CORPORATE':
+        score -= 10  # Higher risk for corporate clients with no alarm
+
+    if sample['Heating_System_Description'] in ['Oil', 'Solid Fuel'] and sample['Home_Type_Description'] in ['Bungalow', 'End Terrace House']:
+        score -= 10  # Higher risk for certain heating systems and home types
+
+    if sample['Number_Of_Bedrooms'] >= 5 and sample['Customer_Type'] == 'PERSONAL':
+        score -= 5  # Larger homes are riskier for personal policies
+
+    if sample['Branch_Name'] in ['branch 1', 'branch 2'] and sample['Broker_Name'] == 'broker1':
+        score += 5  # Positive impact from certain broker and branch combinations
+
+    return score
+
+# Generate synthetic data
+def generate_synthetic_data(n_samples=1000):
+    data = []
+    
+    # Generate samples
+    for _ in range(n_samples):
+        sample = {
+            'Policy_Level_Excess': np.random.choice(feature_values['Policy_Level_Excess']),
+            'Package': np.random.choice(feature_values['Package']),
+            'Buldings_SI': np.random.randint(50000, 150000),  # Random SI
+            'Channel': np.random.choice(feature_values['Channel']),
+            'Competing_Insurer': np.random.choice(feature_values['Competing_Insurer']),
+            'Broker_Name': np.random.choice(feature_values['Broker_Name']),
+            'Branch_Name': np.random.choice(feature_values['Branch_Name']),
+            'Burglar_Alarm_Description': np.random.choice(feature_values['Burglar_Alarm_Description']),
+            'Heating_System_Description': np.random.choice(feature_values['Heating_System_Description']),
+            'Home_Type_Description': np.random.choice(feature_values['Home_Type_Description']),
+            'Home_Use_Description': np.random.choice(feature_values['Home_Use_Description']),
+            'Number_Of_Bedrooms': np.random.choice(feature_values['Number_Of_Bedrooms']),
+            'Roof_felt': np.random.choice(feature_values['Roof_felt']),
+            'Standard_Construction': np.random.choice(feature_values['Standard_Construction']),
+            'Bulding_Age': np.random.randint(1, 150),  # Random building age
+            'Customer_Type': np.random.choice(feature_values['Customer_Type']),
+            'Occupation_Group': np.random.choice(feature_values['Occupation_Group']),
+            'Strategy': np.random.choice(feature_values['Strategy']),
+            'Document_Channel': np.random.choice(feature_values['Document_Channel']),
+            'Affluence_Income_Range': np.random.choice(feature_values['Affluence_Income_Range']),
+        }
+
+        # Calculate score based on interactions
+        score = score_interactions(sample)
+        
+        # Assign outcome based on score
+        if score >= 15:
+            sample['Outcome'] = 'Bind'
+        elif score <= -15:
+            sample['Outcome'] = 'Decline'
+        else:
+            sample['Outcome'] = np.random.choice(['Bind', 'Decline'])  # Neutral score gets a random outcome
+
+        data.append(sample)
+    
+    return pd.DataFrame(data)
+
+# Generate the synthetic dataset
+synthetic_data = generate_synthetic_data(1000)
+
+# Check the distribution of outcomes
+print(synthetic_data['Outcome'].value_counts())
