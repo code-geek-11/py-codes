@@ -1,0 +1,11 @@
+Condition	Description	Score	Reason
+Buldings_SI < 80000	Sum insured is less than 80,000	-15	Low sum insured indicates a less valuable property, increasing risk for the insurer.
+Burglar_Alarm_Description in ['Not Alarmed', 'Not Provided']	Property does not have a burglar alarm or information is not provided	-15	Properties without a burglar alarm are at higher risk for theft and damage.
+Heating_System_Description in ['Oil', 'Solid Fuel', 'Geo Thermal']	Heating system is oil, solid fuel, or geothermal	-10	These heating systems are considered riskier due to potential for malfunction, higher maintenance costs, or increased fire risk.
+Home_Type_Description in ['Apartment/Flat(Groundfloor)', 'End Terrace Bungalow', '3 or More Storied House']	Property type is a ground-floor apartment, end terrace bungalow, or a multi-story house	-10	These home types are associated with increased risk of theft or structural issues (especially for multi-story homes).
+Affluence_Income_Range in ['20', '20-30']	Income range is between 20,000 and 30,000	-15	Lower income brackets are associated with less financial stability, leading to increased risk of policyholders filing claims.
+Home_Use_Description == 'Rented(Proposer is a tenant)' and Number_Of_Bedrooms < 3	Rented property with fewer than 3 bedrooms	-20	Tenants with fewer bedrooms are perceived as higher risk due to less care taken in property maintenance and higher tenant turnover.
+Standard_Construction == 'n' and Bulding_Age > 50	Non-standard construction and building age over 50 years	-20	Older buildings with non-standard construction are more susceptible to damage and structural issues, increasing risk for the insurer.
+Customer_Type == 'CORPORATE'	Corporate customers	-10	Corporate policies generally present higher risk due to larger property portfolios and higher claim sizes.
+Bulding_Age > 100 and Standard_Construction == 'n'	Very old buildings (over 100 years) with non-standard construction	-100	These buildings are extremely high risk and may be uninsurable due to the likelihood of structural issues and high maintenance costs.
+Burglar_Alarm_Description == 'Not Alarmed' and Customer_Type == 'CORPORATE'	Corporate customers without a burglar alarm	-50	Corporate properties without alarms are highly vulnerable to theft or damage, presenting a high-risk scenario.
