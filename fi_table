@@ -1,0 +1,25 @@
+Condition	Description	Score	Reason
+Policy_Level_Excess >= 500	Policy excess nalla perusa iruku (Higher policy excess)	+10	Policyholder more responsible for small claims. Risk konjam kammi.
+Package == 3	Full pakkam eduthirukanga (Selected highest package)	+5	Full pakkam kudukara aal serious policy holder ah irupanga.
+Buldings_SI > 100000	Sum insured 1 lakh mela iruku	+5	Periya veedu irukkum, nalla maintain panna vechurupanga.
+Channel in ['callcenter', 'public']	Call center or public ah vandhuruchu	+5	Direct ah contact panna nalla details correct ah irukum.
+Burglar_Alarm_Description == 'Alarmed'	Alarm vechirukanga veetla	+10	Veedu alarm vechirundha kalavaram koodathu, risk kammi.
+Heating_System_Description in ['Electric', 'Gas']	Electric or gas vechirukanga	+5	Itha safer heating system ah paakalam, vera system la adangarai risk jasthi.
+Home_Type_Description in ['Detached House', 'Bungalow']	Separate house or bungalow iruku	+5	Idhu safer type veedu, neighbors disturbance kammi.
+Home_Use_Description in ['Main Home (Owner occupied)', 'Investment Property(Family)']	Main veedu or family ku use panra veedu	+10	Owner occupied or family use na veedu better ah irukum, maintenance nalla irukum.
+Number_Of_Bedrooms > 3	3 bed room mela iruku	+5	Periya veedu, nalla maintained irukalam, appadiye risk kammi.
+Roof_felt == 'More_30'	Roof felt 30 years mela irundha	+5	Roof nalla maintain panna irundha, veedu safe ah irukum.
+Standard_Construction == 'y'	Regular construction	+5	Namma standard construction safer, build quality better ah irukum.
+Bulding_Age < 30	Building age 30 years kulla iruku	+5	Puthu veedu na problems kammi, maintain pannirukalam.
+Customer_Type == 'PERSONAL'	Personal ah eduthurukanga policy	+5	Personal policy safer, corporate vida better.
+Occupation_Group in ['Retired', 'Healthcare']	Retired illa healthcare field	+5	Ivaru nalla responsible ah irupanga, work pattern quiet ah irukum.
+Strategy == 'Common Pricing'	Common pricing strategy use pannirukanga	+5	Common pricing na complexity kammi, policy safe side.
+Document_Channel == 'Email'	Policy details email la vandhuruku	+5	Email la anupirundha safety jasthi, document miss agathu.
+Affluence_Income_Range in ['75-100', '100-150']	Income range 75k to 150k	+5	Kasu jasthi na, nalla irupanga, settle panna issues kammi.
+Competing_Insurer in ['competitor 1', 'competitor 2']	Inga edutha competitor 1 or 2 irukanga	-5	Ivara switch panna na, risk jasthi ah irukum competitor nalla pakam ilama irukum.
+Home_Use_Description == 'Rented(Proposer is a tenant)' and Number_Of_Bedrooms < 3	Tenant iruka, 3 bedroom kum mela ilaya?	-10	Rent veetla nalla maintain panna kammi, risk jasthi.
+Standard_Construction == 'n' and Bulding_Age > 50	Non-standard build, veedu 50 years mela irukku	-10	Palaya veedu, adhukum non-standard construction na idhu risk irukum.
+Burglar_Alarm_Description == 'Not Alarmed' and Customer_Type == 'CORPORATE'	Corporate veedu la alarm illaya?	-10	Corporate na already risk jasthi, adhukum alarm illaya na chance jasthi.
+Heating_System_Description in ['Oil', 'Solid Fuel'] and Home_Type_Description in ['Bungalow', 'End Terrace House']	Oil or solid fuel use panranga, bungalow or terrace veedu	-10	Itha unsafe heating system ah consider panalam, veedu kum risk.
+Number_Of_Bedrooms >= 5 and Customer_Type == 'PERSONAL'	Personal use, 5 bedrooms iruku	-5	Big personal veedu na maintenance jasthi venum, adhukum risk increase agum.
+Branch_Name in ['branch 1', 'branch 2'] and Broker_Name == 'broker1'	Branch 1/2 iruku, broker1 combine pannirukanga	+5	Idhu nalla combination, broker and branch good side ah irukum.
