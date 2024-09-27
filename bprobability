@@ -1,0 +1,7 @@
+const bindProbability = $('#greenLight').hasClass('blinking') 
+    ? 'Bind' 
+    : $('#redLight').hasClass('blinking') 
+        ? 'Decline' 
+        : $('#orangeLight').hasClass('blinking') 
+            ? 'Review' 
+            : 'Unknown';
