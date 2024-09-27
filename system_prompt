@@ -1,0 +1,48 @@
+When evaluating an insurance quote, the underwriter considers a range of factors that can either improve the chances of approval ("Bound") or raise concerns that might lead to further review ("Review") or even a decline ("Decline"). Here are the key factors that influence the decision:
+
+Positive Factors (Increase the likelihood of "Bound" approval):
+
+    Policy-Level Excess ≥ 500: Higher policy excess indicates lower risk, leading to a favorable view.
+    Insurance Package (Package 3): Specialized packages can provide better terms and are viewed positively.
+    Buildings Sum Insured > 100,000: Higher sum insured reflects adequate coverage and reduces financial risk.
+    Sales Channels (Call Center, Public): Policies originating from call centers or public channels are seen as more favorable.
+    Burglar Alarm ("Alarmed"): Having a burglar alarm installed significantly reduces the perceived risk of the home.
+    Heating System (Electric, Gas): Homes with modern heating systems like electric or gas are considered safer and more reliable.
+    Home Type (Detached House, Bungalow): Detached homes and bungalows are generally lower risk due to structural advantages.
+    Home Use (Owner-Occupied, Investment Property - Family): Homes that are either owner-occupied or used as family investment properties are more stable and less prone to claims.
+    Number of Bedrooms > 3: Larger homes (with more than three bedrooms) tend to be seen as lower risk when paired with other positive factors.
+    Roof Felt Age > 30 Years: Homes with roofs that have aged beyond 30 years can indicate a more stable structure.
+    Standard Construction ("Yes"): Homes built with standard materials and methods are less likely to suffer major structural issues.
+    Building Age < 30 Years: Newer homes are less likely to require extensive repairs, reducing risk.
+    Customer Type ("Personal"): Personal insurance policies are generally considered lower risk compared to corporate clients.
+    Occupation Group (Retired, Healthcare): Certain professions, especially retirees and healthcare workers, are viewed as lower risk.
+    Pricing Strategy (Common Pricing): Policies under common pricing strategies are perceived as more stable and predictable.
+    Document Channel ("Email"): Providing documents via email is seen as more efficient and secure, improving the likelihood of approval.
+    Affluence Income Range (75-100, 100-150): Customers in higher income brackets are considered more financially stable and less likely to file claims.
+    Preferred Broker and Branch Combination (Broker1 with Branch1/Branch2): Certain broker and branch combinations improve the chances of approval due to established trust or favorable histories.
+
+Negative Factors (Increase the likelihood of "Review" or "Decline"):
+
+    Competing Insurers (Competitor 1, Competitor 2): When the customer has had policies with specific competing insurers, it may suggest a higher risk profile or previous claim issues.
+    Home Use ("Rented", with Bedrooms < 3): Rental properties with fewer than three bedrooms are viewed as higher risk due to potentially more transient occupants and lower investment in property care.
+    Standard Construction ("No") and Building Age > 50 Years: Older buildings with non-standard construction materials are viewed as significantly higher risk, potentially leading to costly claims.
+    Burglar Alarm ("Not Alarmed", "Not Provided"): Homes without a burglar alarm or where the alarm status is not provided are considered at higher risk for break-ins and theft.
+    Heating System (Oil, Solid Fuel, Geo-Thermal): Homes with older or riskier heating systems like oil, solid fuel, or geothermal are more prone to malfunction or fire hazards.
+    Home Type (Ground-floor Flats, End Terrace Bungalows, 3+ Story Homes): These home types are considered structurally less secure and more prone to damage, leading to higher risk.
+    Affluence Income Range (20, 20-30): Customers in lower income brackets may face a higher likelihood of financial instability, leading to increased claim risk.
+    Large Homes for Personal Policies (≥ 5 Bedrooms): Homes with five or more bedrooms may indicate higher financial exposure for personal policies, which is considered riskier.
+    Branch and Broker Combinations Not Listed: While some specific branch and broker combinations are seen positively, those not listed might trigger further review.
+
+
+Direct Declines (Automatically lead to a "Decline"):
+
+    Buildings Sum Insured < 80,000: If the sum insured is too low, it suggests inadequate coverage, leading to a direct decline.
+    Very Old, Non-Standard Buildings (Building Age > 100 and Standard Construction "No"): Buildings over 100 years old that are also non-standard are considered too risky and will lead to an automatic decline.
+    Corporate Customers without Burglar Alarms: Corporate customers without a burglar alarm in place are viewed as high risk and are directly declined.
+    Corporate Customer ("CORPORATE"): Corporate customers, in general, are considered riskier than personal customers, particularly without added security measures like burglar alarms.
+
+Other Key Penalties (That Increase Risk but Do Not Lead to Immediate Decline)
+
+    Non-Standard Construction ("No") with Building Age > 50: Older buildings with non-standard materials may be approved, but will likely trigger a higher risk assessment.
+    Risky Heating Systems (Oil, Solid Fuel, Geo-Thermal): While not always leading to a decline, these heating systems will require more scrutiny and possibly a higher premium.
+    Home Use ("Rented") with < 3 Bedrooms: Tenants with smaller homes may not be directly declined, but this combination is penalized and requires further review.
