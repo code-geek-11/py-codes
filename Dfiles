@@ -1,0 +1,94 @@
+import os
+import pandas as pd
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+import dbutils
+
+# Function to calculate directory size
+def get_size_in_mb(path):
+    size = sum(f.size for f in dbutils.fs.ls(path))
+    return size / (1024 * 1024)  # Convert to MB
+
+# Create a Spark DataFrame with sample data
+df = spark.range(0, 1000000).toDF("id").withColumn("value", (col("id") % 100).cast("string"))
+
+# Base output directory
+output_base = "/mnt/data/experiment"
+
+# CSV (with compression)
+csv_path = f"{output_base}/csv"
+df.write.option("compression", "gzip").csv(csv_path)
+csv_size = get_size_in_mb(csv_path)
+
+# JSON (with compression)
+json_path = f"{output_base}/json"
+df.write.option("compression", "gzip").json(json_path)
+json_size = get_size_in_mb(json_path)
+
+# Parquet (with compression)
+parquet_path = f"{output_base}/parquet"
+df.write.option("compression", "gzip").parquet(parquet_path)
+parquet_size = get_size_in_mb(parquet_path)
+
+# ORC (with compression)
+orc_path = f"{output_base}/orc"
+df.write.format("orc").option("compression", "zlib").save(orc_path)
+orc_size = get_size_in_mb(orc_path)
+
+# Delta (Parquet-based format, no additional compression needed)
+delta_path = f"{output_base}/delta"
+df.write.format("delta").save(delta_path)
+delta_size = get_size_in_mb(delta_path)
+
+# Avro (with Snappy compression)
+avro_path = f"{output_base}/avro"
+df.write.format("avro").option("compression", "snappy").save(avro_path)
+avro_size = get_size_in_mb(avro_path)
+
+# Convert Spark DataFrame to Pandas
+pandas_df = df.toPandas()
+
+# Feather (using Pandas)
+feather_path = "/dbfs/mnt/data/experiment/feather/sample.feather"
+pandas_df.to_feather(feather_path)
+feather_size = get_size_in_mb(feather_path)
+
+# HDF5 (using Pandas)
+hdf5_path = "/dbfs/mnt/data/experiment/hdf5/sample.h5"
+pandas_df.to_hdf(hdf5_path, key='df', mode='w')
+hdf5_size = get_size_in_mb(hdf5_path)
+
+# Protobuf (example with serializing to Protobuf, requires schema definition)
+# Assuming you have a Protobuf schema generated as protobuf_example_pb2
+import protobuf_example_pb2  # Replace with your actual Protobuf schema import
+
+def to_protobuf(pandas_df):
+    messages = []
+    for _, row in pandas_df.iterrows():
+        message = protobuf_example_pb2.ExampleMessage(id=row['id'], value=row['value'])
+        messages.append(message.SerializeToString())
+    return messages
+
+protobuf_data = to_protobuf(pandas_df)
+protobuf_path = "/dbfs/mnt/data/experiment/protobuf/protobuf_output"
+with open(protobuf_path, 'wb') as f:
+    for record in protobuf_data:
+        f.write(record)
+protobuf_size = get_size_in_mb(protobuf_path)
+
+# MessagePack (using Pandas)
+msgpack_path = "/dbfs/mnt/data/experiment/msgpack/sample.msgpack"
+pandas_df.to_msgpack(msgpack_path)
+msgpack_size = get_size_in_mb(msgpack_path)
+
+# Print all file sizes
+print(f"CSV Size: {csv_size:.2f} MB")
+print(f"JSON Size: {json_size:.2f} MB")
+print(f"Parquet Size: {parquet_size:.2f} MB")
+print(f"ORC Size: {orc_size:.2f} MB")
+print(f"Delta Size: {delta_size:.2f} MB")
+print(f"Avro Size: {avro_size:.2f} MB")
+print(f"Feather Size: {feather_size:.2f} MB")
+print(f"HDF5 Size: {hdf5_size:.2f} MB")
+print(f"Protobuf Size: {protobuf_size:.2f} MB")
+print(f"MessagePack Size: {msgpack_size:.2f} MB")
