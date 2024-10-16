@@ -1,0 +1,11 @@
+-- Step 1: Create a new table with the same structure
+CREATE TABLE new_table LIKE your_table;
+
+-- Step 2: Insert the rows you want to keep
+INSERT INTO new_table SELECT * FROM your_table WHERE id = 1;  -- Adjust condition as needed
+
+-- Step 3: Drop the old table
+DROP TABLE your_table;
+
+-- Step 4: Rename the new table to the original table name
+ALTER TABLE new_table RENAME TO your_table;
