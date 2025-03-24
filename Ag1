@@ -1,0 +1,38 @@
+import re
+from langchain.tools import Tool
+
+# Function to remove SAS comments
+def remove_sas_comments(sas_code: str) -> str:
+    """
+    Removes all comments from a SAS program.
+    
+    - Removes multi-line comments: /* ... */
+    - Removes single-line comments: * ... ;
+    """
+    # Remove multi-line comments (/* ... */)
+    sas_code = re.sub(r"/\*.*?\*/", "", sas_code, flags=re.DOTALL)
+    
+    # Remove single-line comments (* ... ;)
+    sas_code = re.sub(r"^\s*\*.*?;", "", sas_code, flags=re.MULTILINE)
+
+    return sas_code.strip()
+
+# Define LangChain Tool
+remove_comments_tool = Tool(
+    name="SASCommentRemover",
+    description="Removes all comments from a given SAS program.",
+    func=remove_sas_comments
+)
+
+# Example SAS Code
+sas_program = """
+/* This is a multi-line comment */
+PROC SQL;
+    * This is a single-line comment;
+    SELECT * FROM orders;
+QUIT;
+"""
+
+# Use the tool
+cleaned_sas_code = remove_comments_tool.run(sas_program)
+print("Cleaned SAS Code:\n", cleaned_sas_code)
