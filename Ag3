@@ -1,0 +1,33 @@
+import re
+import os
+from langchain.tools import Tool
+
+def remove_sas_comments_from_file(file_path: str, output_path: str = None) -> str:
+    """
+    Reads a SAS file, removes all comments, and saves the cleaned SAS code.
+    
+    - If `output_path` is not provided, it saves the file as `<original_name>_cleaned.sas`.
+    - Returns the path of the cleaned file.
+    """
+    with open(file_path, "r", encoding="utf-8") as file:
+        sas_code = file.read()
+
+    # Remove multi-line comments (/* ... */)
+    sas_code = re.sub(r"/\*.*?\*/", "", sas_code, flags=re.DOTALL)
+    
+    # Remove single-line comments (* ... ;)
+    sas_code = re.sub(r"^\s*\*.*?;", "", sas_code, flags=re.MULTILINE)
+
+    cleaned_sas_code = sas_code.strip()
+
+    # Generate a default output file name if not provided
+    if output_path is None:
+        base_name, ext = os.path.splitext(file_path)
+        output_path = f"{base_name}_cleaned{ext}"
+
+    # Save cleaned code to file
+    with open(output_path, "w", encoding="utf-8") as file:
+        file.write(cleaned_sas_code)
+
+    print(f"Cleaned SAS file saved to: {output_path}")
+    return output_path  # Returning the output file path
