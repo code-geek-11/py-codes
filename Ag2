@@ -1,0 +1,26 @@
+import re
+
+def remove_sas_comments_from_file(file_path: str, output_path: str = None) -> str:
+    """
+    Reads a SAS file, removes all comments, and optionally saves the cleaned file.
+    
+    - file_path: Path to the input .sas file.
+    - output_path (optional): If provided, saves the cleaned SAS code to this file.
+    """
+    with open(file_path, "r", encoding="utf-8") as file:
+        sas_code = file.read()
+
+    # Remove multi-line comments (/* ... */)
+    sas_code = re.sub(r"/\*.*?\*/", "", sas_code, flags=re.DOTALL)
+    
+    # Remove single-line comments (* ... ;)
+    sas_code = re.sub(r"^\s*\*.*?;", "", sas_code, flags=re.MULTILINE)
+
+    cleaned_sas_code = sas_code.strip()
+
+    # Save to output file if specified
+    if output_path:
+        with open(output_path, "w", encoding="utf-8") as file:
+            file.write(cleaned_sas_code)
+
+    return cleaned_sas_code
