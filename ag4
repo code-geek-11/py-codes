@@ -1,0 +1,61 @@
+import os
+from langchain.chat_models import ChatOpenAI
+from langchain.tools import Tool
+
+# Initialize LLM (e.g., OpenAI GPT-4 Turbo)
+llm = ChatOpenAI(model="gpt-4-turbo", temperature=0)
+
+def remove_comments_from_sas_file(file_path: str, output_path: str = None) -> str:
+    """
+    Reads a SAS file, removes all comments using an LLM, and saves the cleaned SAS code.
+    
+    - file_path: Path to the input .sas file.
+    - output_path (optional): If not provided, saves to <original_name>_cleaned.sas.
+    
+    Returns the path of the cleaned SAS file.
+    """
+    # Read SAS file content
+    with open(file_path, "r", encoding="utf-8") as file:
+        sas_code = file.read()
+
+    # LLM Prompt for comment removal
+    prompt = f"""
+    You are an expert SAS programmer. Remove all comments from the following SAS program
+    while keeping the code structure intact. Do NOT modify the code, only remove comments.
+
+    SAS Program:
+    ```
+    {sas_code}
+    ```
+
+    Return only the cleaned SAS code without any explanations.
+    """
+
+    # Call LLM using invoke()
+    response = llm.invoke(prompt)
+    cleaned_sas_code = response.content.strip()  # Extracting the text output
+
+    # Generate a default output file name if not provided
+    if output_path is None:
+        base_name, ext = os.path.splitext(file_path)
+        output_path = f"{base_name}_cleaned{ext}"
+
+    # Save cleaned SAS code to output file
+    with open(output_path, "w", encoding="utf-8") as file:
+        file.write(cleaned_sas_code)
+
+    print(f"Cleaned SAS file saved to: {output_path}")
+    return output_path  # Returning the cleaned file path
+
+# Define LangChain Tool
+remove_comments_file_tool = Tool(
+    name="SASFileCommentRemoverLLM",
+    description="Uses an LLM to remove comments from a SAS file. Input: file path.",
+    func=remove_comments_from_sas_file
+)
+
+# Example Usage
+file_path = "example.sas"  # Input SAS file
+cleaned_file_path = remove_comments_file_tool.run(file_path)
+
+print(f"Processed file saved at: {cleaned_file_path}")
