@@ -1,0 +1,30 @@
+from pyspark.sql.functions import col
+from pyspark.sql.types import StructType, StructField
+
+def flatten_df(df):
+    # List of columns to select
+    flat_columns = []
+    
+    # Recursively flatten the DataFrame
+    def flatten_struct(fields, prefix=""):
+        for field in fields:
+            field_name = field.name
+            field_type = field.dataType
+            
+            # If the field is a struct, recursively call flatten_struct
+            if isinstance(field_type, StructType):
+                flatten_struct(field_type.fields, prefix + field_name + ".")
+            else:
+                # Otherwise, add it to the list of columns with the full name (flattened)
+                flat_columns.append(col(prefix + field_name).alias(prefix + field_name))
+    
+    # Apply the flattening to the schema
+    flatten_struct(df.schema.fields)
+    
+    # Select all the flattened columns
+    return df.select(flat_columns)
+
+# Example of flattening the DataFrame
+flattened_df = flatten_df(df)
+flattened_df.show(truncate=False)
+flattened_df.printSchema()
