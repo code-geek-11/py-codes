@@ -1,0 +1,55 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, explode_outer
+from pyspark.sql.types import StructType, ArrayType
+
+# Create Spark session
+spark = SparkSession.builder.appName("FlattenJSON").getOrCreate()
+
+# Load JSON
+df = spark.read.option("multiline", "true").json("path/to/your/file.json")
+
+print("Original Schema:")
+df.printSchema()
+df.show(truncate=False)
+
+def flatten(df):
+    """
+    Recursively flattens a DataFrame with nested structs and arrays of structs.
+    """
+    def is_complex(data_type):
+        return isinstance(data_type, (StructType, ArrayType))
+
+    while True:
+        complex_fields = []
+        for field in df.schema.fields:
+            if isinstance(field.dataType, StructType):
+                complex_fields.append((field.name, "struct"))
+            elif isinstance(field.dataType, ArrayType):
+                if isinstance(field.dataType.elementType, StructType):
+                    complex_fields.append((field.name, "array_struct"))
+
+        if not complex_fields:
+            break
+
+        for col_name, kind in complex_fields:
+            if kind == "struct":
+                print(f"\nFlattening struct column: {col_name}")
+                expanded = [col(f"{col_name}.{field.name}").alias(f"{col_name}_{field.name}")
+                            for field in df.schema[col_name].dataType.fields]
+                for field in df.schema[col_name].dataType.fields:
+                    print(f" - {col_name}_{field.name}: {field.dataType}")
+                df = df.select("*", *expanded).drop(col_name)
+
+            elif kind == "array_struct":
+                print(f"\nExploding array of structs: {col_name}")
+                df = df.withColumn(col_name, explode_outer(col(col_name)))
+
+    return df
+
+# Flatten the DataFrame
+flat_df = flatten(df)
+
+# Show final results
+print("\nFinal Flattened Schema:")
+flat_df.printSchema()
+flat_df.show(truncate=False)
