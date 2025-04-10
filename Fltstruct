@@ -1,0 +1,47 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, explode
+from pyspark.sql.types import StructType, ArrayType
+
+# Initialize Spark session
+spark = SparkSession.builder.appName("FlattenJSON").getOrCreate()
+
+# Read multiline nested JSON file
+df = spark.read.option("multiline", "true").json("path/to/your/file.json")
+
+def flatten_df(nested_df):
+    nested_cols = []
+
+    for column_name, column_type in nested_df.dtypes:
+        if "struct" in column_type or "array" in column_type:
+            nested_cols.append(column_name)
+
+    while nested_cols:
+        col_name = nested_cols.pop(0)
+        dtype = dict(nested_df.dtypes)[col_name]
+
+        if "struct" in dtype:
+            print(f"\nFlattening struct column: {col_name}")
+            for field in nested_df.schema[col_name].dataType.fields:
+                print(f" - {col_name}_{field.name}: {field.dataType}")
+            expanded = [col(f"{col_name}.{field.name}").alias(f"{col_name}_{field.name}")
+                        for field in nested_df.schema[col_name].dataType.fields]
+            nested_df = nested_df.select("*", *expanded).drop(col_name)
+
+        elif "array" in dtype:
+            print(f"\nExploding array column: {col_name}")
+            nested_df = nested_df.withColumn(col_name, explode(col(col_name)))
+            # Check if exploded items are structs
+            element_type = nested_df.schema[col_name].dataType
+            if isinstance(element_type, StructType):
+                for field in element_type.fields:
+                    print(f" - {col_name}_{field.name}: {field.dataType}")
+
+        nested_cols = [name for name, dtype in nested_df.dtypes if "struct" in dtype or "array" in dtype]
+
+    return nested_df
+
+# Flatten and print inline schema during the process
+flat_df = flatten_df(df)
+
+# Show the final flattened DataFrame
+flat_df.show(truncate=False)
