@@ -1,0 +1,55 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, explode_outer, size
+from pyspark.sql.types import StructType, ArrayType
+
+# Initialize Spark session
+spark = SparkSession.builder.appName("FlattenNestedJSON").getOrCreate()
+
+# Read the multiline nested JSON file
+df = spark.read.option("multiline", "true").json("path/to/your/file.json")
+
+# Print initial schema and data
+print("Original Schema:")
+df.printSchema()
+df.show(truncate=False)
+
+def flatten_df(df):
+    """
+    Recursively flattens a nested DataFrame.
+    """
+    while True:
+        complex_fields = [(field.name, field.dataType) for field in df.schema.fields 
+                          if isinstance(field.dataType, (StructType, ArrayType))]
+
+        if not complex_fields:
+            break
+
+        for col_name, col_type in complex_fields:
+            if isinstance(col_type, StructType):
+                print(f"\nFlattening struct column: {col_name}")
+                for field in col_type.fields:
+                    print(f" - {col_name}_{field.name}: {field.dataType}")
+                new_cols = [col(f"{col_name}.{field.name}").alias(f"{col_name}_{field.name}") 
+                            for field in col_type.fields]
+                df = df.select("*", *new_cols).drop(col_name)
+
+            elif isinstance(col_type, ArrayType):
+                print(f"\nExploding array column: {col_name}")
+                # Optionally skip empty arrays
+                df = df.filter(size(col(col_name)) > 0)
+                df = df.withColumn(col_name, explode_outer(col(col_name)))
+
+                if isinstance(col_type.elementType, StructType):
+                    print(f" - {col_name} contains struct elements:")
+                    for field in col_type.elementType.fields:
+                        print(f"   - {col_name}_{field.name}: {field.dataType}")
+
+    return df
+
+# Flatten the DataFrame and print during the process
+flat_df = flatten_df(df)
+
+# Show final result
+print("\nFlattened DataFrame:")
+flat_df.printSchema()
+flat_df.show(truncate=False)
