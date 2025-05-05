@@ -1,0 +1,30 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.window import Window
+from pyspark.sql.functions import col, first, last, when
+
+# Initialize Spark session
+spark = SparkSession.builder.appName("SAS to PySpark").getOrCreate()
+
+# Assuming the data is already in a Spark DataFrame named df
+# Let's load data into a DataFrame (replace with your actual data source)
+# df = spark.read.csv('path_to_your_data', header=True, inferSchema=True)
+
+# Define the columns that need to be kept (like SAS `keep`)
+columns_to_keep = ['clmkyw', 'thpsqw', 'pollow', 'polriw', 'polpmw', 'clmsqw', 'clmvtw'] + \
+                  [f'Repaired_Tes_Amt_{i:02}' for i in range(1, 11)] + \
+                  [f'Repaired_Tes_Desc_{i:02}' for i in range(1, 11)]
+
+# Select the columns to keep
+df = df.select(*columns_to_keep)
+
+# Define a window specification to perform grouping
+window_spec = Window.partitionBy('clmkyw', 'thpsqw', 'pollow', 'polriw', 'polpmw', 'clmsqw').orderBy('clmvtw')
+
+# Add `first` and `last` flags for `clmkyw` and `thpsqw`
+df = df.withColumn('first_clmkyw', when((col('clmkyw') == first('clmkyw').over(window_spec)), 1).otherwise(0)) \
+       .withColumn('last_clmkyw', when((col('clmkyw') == last('clmkyw').over(window_spec)), 1).otherwise(0)) \
+       .withColumn('first_thpsqw', when((col('thpsqw') == first('thpsqw').over(window_spec)), 1).otherwise(0)) \
+       .withColumn('last_thpsqw', when((col('thpsqw') == last('thpsqw').over(window_spec)), 1).otherwise(0))
+
+# Show the result (this will show the first 20 rows)
+df.show()
