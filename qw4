@@ -1,0 +1,6 @@
+
+# Add first/last flags for each column
+df = df.withColumn('first_clmkyw', when(row_number().over(window_spec) == 1, 1).otherwise(0)) \
+       .withColumn('last_clmkyw', when(row_number().over(window_spec) == row_number().over(window_spec).desc().last(), 1).otherwise(0)) \
+       .withColumn('first_thpsqw', when(row_number().over(window_spec) == 1, 1).otherwise(0)) \
+       .withColumn('last_thpsqw', when(row_number().over(window_spec) == row_number().over(window_spec).desc().last(), 1).otherwise(0))
