@@ -1,0 +1,36 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.window import Window
+from pyspark.sql.functions import col, when, row_number, last
+
+# Initialize Spark session
+spark = SparkSession.builder.appName("SAS to PySpark").getOrCreate()
+
+# Sample DataFrame
+data = [
+    ('A', 1, 1, 1, 1, 1, 100, 200, 300, 400, 500, 600),
+    ('A', 1, 1, 1, 1, 2, 110, 210, 310, 410, 510, 610),
+    ('A', 2, 1, 1, 1, 3, 120, 220, 320, 420, 520, 620),
+    ('B', 1, 1, 1, 1, 4, 130, 230, 330, 430, 530, 630),
+    ('B', 1, 1, 1, 1, 5, 140, 240, 340, 440, 540, 640),
+    ('B', 2, 1, 1, 1, 6, 150, 250, 350, 450, 550, 650)
+]
+
+columns = ['clmkyw', 'thpsqw', 'pollow', 'polriw', 'polpmw', 'clmsqw', 
+           'Repaired_Tes_Amt_01', 'Repaired_Tes_Amt_02', 'Repaired_Tes_Amt_03',
+           'Repaired_Tes_Amt_04', 'Repaired_Tes_Amt_05', 'Repaired_Tes_Amt_06']
+
+# Create DataFrame
+df = spark.createDataFrame(data, columns)
+
+# Define the window spec: partition by both 'clmkyw' and 'thpsqw', ordered by 'clmsqw'
+window_spec_clmkyw = Window.partitionBy('clmkyw').orderBy('clmsqw')
+window_spec_thpsqw = Window.partitionBy('clmkyw', 'thpsqw').orderBy('clmsqw')
+
+# Add first/last flags for each column (clmkyw, thpsqw)
+df = df.withColumn('first_clmkyw', when(row_number().over(window_spec_clmkyw) == 1, 1).otherwise(0)) \
+       .withColumn('last_clmkyw', when(row_number().over(window_spec_clmkyw) == last('row_num').over(window_spec_clmkyw), 1).otherwise(0)) \
+       .withColumn('first_thpsqw', when(row_number().over(window_spec_thpsqw) == 1, 1).otherwise(0)) \
+       .withColumn('last_thpsqw', when(row_number().over(window_spec_thpsqw) == last('row_num').over(window_spec_thpsqw), 1).otherwise(0))
+
+# Show the DataFrame with flags
+df.show(truncate=False)
