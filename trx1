@@ -1,0 +1,48 @@
+from pyspark.sql import functions as F
+
+# Step 1: Add a unique row identifier
+df = df.withColumn("row_id", F.monotonically_increasing_id())
+
+# Step 2: Create a positional index to explode arrays
+df_exploded = df.withColumn("pos", F.expr("sequence(0, 9)")) \
+    .withColumn("pos", F.explode("pos")) \
+    .withColumn("Est_Desc_i", F.col("Est_Desc")[F.col("pos")]) \
+    .withColumn("Est_Amt_i", F.col("Est_Amt")[F.col("pos")]) \
+    .withColumn("pay_d_grp_i", F.col("pay_d_grp")[F.col("pos")]) \
+    .withColumn("pay_D_ALAE_i", F.col("pay_D_ALAE")[F.col("pos")])
+
+# Step 3: Apply conditional logic using withColumns (for multiple columns)
+df_logic = df_exploded.withColumns({
+    "Pay_Reserve_General_Indemnity": F.when(F.col("pay_d_grp_i") == "General Indemnity", F.col("Est_Amt_i")).otherwise(0),
+    "Pay_Reserve_Special_Indemnity": F.when(F.col("pay_d_grp_i") == "Special Indemnity", F.col("Est_Amt_i")).otherwise(0),
+    "Pay_Reserve_Costs": F.when(F.col("pay_d_grp_i") == "Costs", F.col("Est_Amt_i")).otherwise(0),
+    "Pay_Reserve_Other": F.when(~F.col("pay_d_grp_i").isin("General Indemnity", "Special Indemnity", "Costs"), F.col("Est_Amt_i")).otherwise(0),
+    "Al_ALAE_Payment_Reserve": F.when(F.col("pay_D_ALAE_i") == "ALAE", F.col("Est_Amt_i")).otherwise(0),
+    "Al_Indemnity_Payment_Reserve": F.when(F.col("pay_D_ALAE_i") != "ALAE", F.col("Est_Amt_i")).otherwise(0),
+    "payment_rec_total": F.when(F.col("NOT_3rd_Party"), F.col("Est_Amt_i")).otherwise(0),
+    "clmTes_P_and_R_rec_total": F.when(F.col("NOT_3rd_Party"), F.col("Est_Amt_i")).otherwise(0)
+})
+
+# Step 4: Identify unknown descriptions (pay_d_grp = Est_Desc_i and Est_Desc_i not blank)
+df_unknown_desc = df_logic.filter(
+    (F.col("pay_d_grp_i") == F.col("Est_Desc_i")) &
+    (F.col("Est_Desc_i") != "")
+)
+
+# This will be your equivalent of `LPMo_Dta.CL_clmTes_CHK_desc_unknown`
+CL_clmTes_CHK_desc_unknown = df_unknown_desc.select("row_id", "Est_Desc_i", "pay_d_grp_i")
+
+# Step 5: Aggregate per original row using `row_id`
+aggregated = df_logic.groupBy("row_id").agg(
+    F.sum("Pay_Reserve_General_Indemnity").alias("Pay_Reserve_General_Indemnity"),
+    F.sum("Pay_Reserve_Special_Indemnity").alias("Pay_Reserve_Special_Indemnity"),
+    F.sum("Pay_Reserve_Costs").alias("Pay_Reserve_Costs"),
+    F.sum("Pay_Reserve_Other").alias("Pay_Reserve_Other"),
+    F.sum("Al_ALAE_Payment_Reserve").alias("Al_ALAE_Payment_Reserve"),
+    F.sum("Al_Indemnity_Payment_Reserve").alias("Al_Indemnity_Payment_Reserve"),
+    F.sum("payment_rec_total").alias("payment_rec_total"),
+    F.sum("clmTes_P_and_R_rec_total").alias("clmTes_P_and_R_rec_total")
+)
+
+# Step 6: Join aggregated values back to original df
+final_df = df.join(aggregated, on="row_id", how="left")
