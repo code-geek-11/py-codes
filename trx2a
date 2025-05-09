@@ -1,0 +1,58 @@
+# PySpark equivalent for SAS logic when clmvtw = 'R'
+from pyspark.sql import functions as F
+from pyspark.sql.window import Window
+
+# Step 1: Filter for clmvtw = 'R'
+df_r = df.filter(F.col("clmvtw") == "R")
+
+# Step 2: Create array columns if not already present (assuming you have Est_Desc_01 to Est_Desc_10, etc.)
+est_desc_cols = [f"Est_Desc_{str(i).zfill(2)}" for i in range(1, 11)]
+est_amt_cols = [f"Est_Amt_{str(i).zfill(2)}" for i in range(1, 11)]
+
+df_r = df_r.withColumns({
+    "Est_Desc": F.array(*[F.col(c) for c in est_desc_cols]),
+    "Est_Amt": F.array(*[F.col(c) for c in est_amt_cols])
+})
+
+# Step 3: Explode arrays by index
+df_r = df_r.withColumn("row_id", F.monotonically_increasing_id()) \
+    .withColumn("pos", F.expr("sequence(0, 9)")) \
+    .withColumn("pos", F.explode("pos")) \
+    .withColumn("Est_Desc_i", F.col("Est_Desc")[F.col("pos")]) \
+    .withColumn("Est_Amt_i", F.col("Est_Amt")[F.col("pos")])
+
+# Step 4: Join with rec_d_grp lookup
+df_rec_format = df_format.select(
+    F.col("payment_dissection_desc").alias("desc_lookup"),
+    F.col("rec_d_grp")
+)
+
+df_r = df_r.join(
+    df_rec_format,
+    df_r["Est_Desc_i"] == df_rec_format["desc_lookup"],
+    how="left"
+).drop("desc_lookup")
+
+# Step 5: Apply reserve logic
+df_r_logic = df_r.withColumns({
+    "Rec_Reserve_General_Indemnity": F.when(F.col("rec_d_grp") == "General Indemnity", -F.col("Est_Amt_i")).otherwise(0),
+    "Rec_Reserve_Special_Indemnity": F.when(F.col("rec_d_grp") == "Special Indemnity", -F.col("Est_Amt_i")).otherwise(0),
+    "Rec_Reserve_Costs": F.when(F.col("rec_d_grp") == "Costs", -F.col("Est_Amt_i")).otherwise(0),
+    "Rec_Reserve_Other": F.when(~F.col("rec_d_grp").isin("General Indemnity", "Special Indemnity", "Costs"), -F.col("Est_Amt_i")).otherwise(0)
+})
+
+# Step 6: Extract unknown descriptions
+df_rec_unknown = df_r_logic.filter(
+    (F.col("rec_d_grp") == F.col("Est_Desc_i")) & (F.col("Est_Desc_i") != "")
+).select("row_id", "Est_Desc_i", "rec_d_grp")
+
+# Step 7: Aggregate by row_id
+df_r_aggregated = df_r_logic.groupBy("row_id").agg(
+    F.sum("Rec_Reserve_General_Indemnity").alias("Rec_Reserve_General_Indemnity"),
+    F.sum("Rec_Reserve_Special_Indemnity").alias("Rec_Reserve_Special_Indemnity"),
+    F.sum("Rec_Reserve_Costs").alias("Rec_Reserve_Costs"),
+    F.sum("Rec_Reserve_Other").alias("Rec_Reserve_Other")
+)
+
+# Step 8: Join back to original 'R' data if needed
+df_r_final = df_r.join(df_r_aggregated, on="row_id", how="left")
