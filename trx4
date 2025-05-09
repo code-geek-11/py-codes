@@ -1,0 +1,9 @@
+df_final = df_joined.groupBy("row_id").agg(
+    F.first("Est_Desc").alias("Est_Desc"),
+    F.first("Est_Amt").alias("Est_Amt"),
+    F.first("pay_d_grp_array").alias("pay_d_grp_structs"),
+    F.first("pay_D_ALAE_array").alias("pay_D_ALAE_structs")
+).withColumns({
+    "pay_d_grp": F.expr("transform(array_sort(pay_d_grp_structs), x -> x.pay_d_grp)"),
+    "pay_D_ALAE": F.expr("transform(array_sort(pay_D_ALAE_structs), x -> x.indemnity_or_alae)")
+}).drop("pay_d_grp_structs", "pay_D_ALAE_structs")
