@@ -1,0 +1,87 @@
+# PySpark notebook: Process Est_Desc and Est_Amt columns, map with df_format, compute reserves
+
+from pyspark.sql import functions as F
+from pyspark.sql import Window
+
+# --------------------- Step 1: Convert wide columns into arrays ---------------------
+est_desc_cols = [f"Est_Desc_{str(i).zfill(2)}" for i in range(1, 11)]
+est_amt_cols = [f"Est_Amt_{str(i).zfill(2)}" for i in range(1, 11)]
+
+df = df.withColumns({
+    "Est_Desc": F.array(*[F.col(c) for c in est_desc_cols]),
+    "Est_Amt": F.array(*[F.col(c) for c in est_amt_cols])
+})
+
+# --------------------- Step 2: Explode arrays by position ---------------------
+df = df.withColumn("row_id", F.monotonically_increasing_id()) \
+       .withColumn("pos", F.expr("sequence(0, 9)")) \
+       .withColumn("pos", F.explode("pos")) \
+       .withColumn("Est_Desc_i", F.col("Est_Desc")[F.col("pos")]) \
+       .withColumn("Est_Amt_i", F.col("Est_Amt")[F.col("pos")])
+
+# --------------------- Step 3: Join with df_format to get pay_d_grp and pay_D_ALAE ---------------------
+df_format_clean = df_format.select(
+    F.col("payment_dissection_desc").alias("desc_lookup"),
+    "pay_d_grp",
+    "indemnity_or_alae"
+)
+
+df_joined = df.join(
+    df_format_clean,
+    df["Est_Desc_i"] == df_format_clean["desc_lookup"],
+    how="left"
+).drop("desc_lookup")
+
+# --------------------- Step 4: Collect pay_d_grp and pay_D_ALAE back into arrays ---------------------
+windowSpec = Window.partitionBy("row_id").orderBy("pos")
+
+df_joined = df_joined.withColumn("pay_d_grp_array", F.collect_list("pay_d_grp").over(windowSpec)) \
+                         .withColumn("pay_D_ALAE_array", F.collect_list("indemnity_or_alae").over(windowSpec))
+
+# Reduce to one row per row_id
+df_final = df_joined.groupBy("row_id").agg(
+    F.first("Est_Desc").alias("Est_Desc"),
+    F.first("Est_Amt").alias("Est_Amt"),
+    F.first("pay_d_grp_array").alias("pay_d_grp"),
+    F.first("pay_D_ALAE_array").alias("pay_D_ALAE")
+)
+
+# --------------------- Step 5: Re-explode to calculate reserves ---------------------
+df_exploded = df_final.withColumn("pos", F.expr("sequence(0, 9)")) \
+    .withColumn("pos", F.explode("pos")) \
+    .withColumn("Est_Desc_i", F.col("Est_Desc")[F.col("pos")]) \
+    .withColumn("Est_Amt_i", F.col("Est_Amt")[F.col("pos")]) \
+    .withColumn("pay_d_grp_i", F.col("pay_d_grp")[F.col("pos")]) \
+    .withColumn("pay_D_ALAE_i", F.col("pay_D_ALAE")[F.col("pos")])
+
+# --------------------- Step 6: Add reserve calculations ---------------------
+df_logic = df_exploded.withColumns({
+    "Pay_Reserve_General_Indemnity": F.when(F.col("pay_d_grp_i") == "General Indemnity", F.col("Est_Amt_i")).otherwise(0),
+    "Pay_Reserve_Special_Indemnity": F.when(F.col("pay_d_grp_i") == "Special Indemnity", F.col("Est_Amt_i")).otherwise(0),
+    "Pay_Reserve_Costs": F.when(F.col("pay_d_grp_i") == "Costs", F.col("Est_Amt_i")).otherwise(0),
+    "Pay_Reserve_Other": F.when(~F.col("pay_d_grp_i").isin("General Indemnity", "Special Indemnity", "Costs"), F.col("Est_Amt_i")).otherwise(0),
+    "Al_ALAE_Payment_Reserve": F.when(F.col("pay_D_ALAE_i") == "ALAE", F.col("Est_Amt_i")).otherwise(0),
+    "Al_Indemnity_Payment_Reserve": F.when(F.col("pay_D_ALAE_i") != "ALAE", F.col("Est_Amt_i")).otherwise(0),
+    "payment_rec_total": F.when(F.col("NOT_3rd_Party"), F.col("Est_Amt_i")).otherwise(0),
+    "clmTes_P_and_R_rec_total": F.when(F.col("NOT_3rd_Party"), F.col("Est_Amt_i")).otherwise(0)
+})
+
+# --------------------- Step 7: Extract unknown descriptions ---------------------
+df_unknown = df_logic.filter(
+    (F.col("pay_d_grp_i") == F.col("Est_Desc_i")) & (F.col("Est_Desc_i") != "")
+).select("row_id", "Est_Desc_i", "pay_d_grp_i")
+
+# --------------------- Step 8: Aggregate values back to row ---------------------
+df_aggregated = df_logic.groupBy("row_id").agg(
+    F.sum("Pay_Reserve_General_Indemnity").alias("Pay_Reserve_General_Indemnity"),
+    F.sum("Pay_Reserve_Special_Indemnity").alias("Pay_Reserve_Special_Indemnity"),
+    F.sum("Pay_Reserve_Costs").alias("Pay_Reserve_Costs"),
+    F.sum("Pay_Reserve_Other").alias("Pay_Reserve_Other"),
+    F.sum("Al_ALAE_Payment_Reserve").alias("Al_ALAE_Payment_Reserve"),
+    F.sum("Al_Indemnity_Payment_Reserve").alias("Al_Indemnity_Payment_Reserve"),
+    F.sum("payment_rec_total").alias("payment_rec_total"),
+    F.sum("clmTes_P_and_R_rec_total").alias("clmTes_P_and_R_rec_total")
+)
+
+# --------------------- Step 9: Join final output back to original df ---------------------
+final_df = df.join(df_aggregated, on="row_id", how="left")
