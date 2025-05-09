@@ -1,0 +1,12 @@
+from pyspark.sql import functions as F
+from pyspark.sql.window import Window
+
+windowSpec = Window.partitionBy("row_id").orderBy("pos")
+
+df_joined = df_joined.withColumn("pay_d_grp_struct", F.struct(F.col("pos"), F.col("pay_d_grp"))) \
+                     .withColumn("pay_D_ALAE_struct", F.struct(F.col("pos"), F.col("indemnity_or_alae")))
+
+df_joined = df_joined.withColumn("pay_d_grp_array",
+                                 F.collect_list("pay_d_grp_struct").over(windowSpec)) \
+                     .withColumn("pay_D_ALAE_array",
+                                 F.collect_list("pay_D_ALAE_struct").over(windowSpec))
