@@ -1,0 +1,16 @@
+from pyspark.sql import functions as F
+
+df_grouped = df_joined.groupBy("row_id").agg(
+    F.first("Est_Desc").alias("Est_Desc"),
+    F.first("Est_Amt").alias("Est_Amt"),
+    
+    # Collect structs to preserve position (including nulls)
+    F.collect_list(F.struct("pos", "pay_d_grp")).alias("pay_d_grp_structs"),
+    F.collect_list(F.struct("pos", "indemnity_or_alae")).alias("pay_D_ALAE_structs")
+)
+
+# Sort by position and extract values
+df_final = df_grouped.withColumns({
+    "pay_d_grp": F.expr("transform(array_sort(pay_d_grp_structs), x -> x.pay_d_grp)"),
+    "pay_D_ALAE": F.expr("transform(array_sort(pay_D_ALAE_structs), x -> x.indemnity_or_alae)")
+}).drop("pay_d_grp_structs", "pay_D_ALAE_structs")
