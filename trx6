@@ -1,0 +1,66 @@
+from pyspark.sql.functions import (
+    col, when, expr, size, lit, arrays_zip, aggregate, struct
+)
+
+# Filter only rows where _3rd_Party is True
+df_filtered = df_final.filter(col('_3rd_Party') == True)
+
+# Zip Est_Desc and Est_Amt arrays into one array of structs
+df_zipped = df_filtered.withColumn(
+    "estimates",
+    arrays_zip("Est_Desc", "Est_Amt")
+)
+
+# Apply transformation using aggregate to mimic the loop
+df_result = df_zipped.withColumn(
+    "metrics",
+    aggregate(
+        col("estimates"),
+        struct(
+            lit(0.0).alias("Payment_tpi_clmTes_amt"),
+            lit(0.0).alias("Payment_tppd_clmTes_amt"),
+            lit(0.0).alias("Payment_tpu_clmTes_amt"),
+            lit(0.0).alias("Recovery_tpu_clmTes_amt"),
+            lit(0.0).alias("payment_rec_total"),
+            lit(0.0).alias("Recovery_rec_total"),
+            lit(0.0).alias("clmTes_P_and_R_rec_total")
+        ),
+        lambda acc, x: when(
+            (x["Est_Desc"].isNotNull()) & (x["Est_Desc"] != "") & (x["Est_Amt"].isNotNull()) & (x["Est_Amt"] != 0),
+            when(col("clmvtw") == 'P',
+                struct(
+                    acc["Payment_tpi_clmTes_amt"] + when((x["Est_Desc"] == "TP INJURY") | (x["Est_Desc"].substr(1, 3) == "RBA"), x["Est_Amt"]).otherwise(0.0),
+                    acc["Payment_tppd_clmTes_amt"] + when(x["Est_Desc"] == "TP PROP DG", x["Est_Amt"]).otherwise(0.0),
+                    acc["Payment_tpu_clmTes_amt"] + when(~((x["Est_Desc"] == "TP INJURY") | (x["Est_Desc"].substr(1, 3) == "RBA") | (x["Est_Desc"] == "TP PROP DG")), x["Est_Amt"]).otherwise(0.0),
+                    acc["Recovery_tpu_clmTes_amt"],
+                    acc["payment_rec_total"] + x["Est_Amt"],
+                    acc["Recovery_rec_total"],
+                    acc["clmTes_P_and_R_rec_total"] + x["Est_Amt"]
+                )
+            ).otherwise(
+                struct(
+                    acc["Payment_tpi_clmTes_amt"],
+                    acc["Payment_tppd_clmTes_amt"],
+                    acc["Payment_tpu_clmTes_amt"],
+                    acc["Recovery_tpu_clmTes_amt"] - x["Est_Amt"],
+                    acc["payment_rec_total"],
+                    acc["Recovery_rec_total"] - x["Est_Amt"],
+                    acc["clmTes_P_and_R_rec_total"] - x["Est_Amt"]
+                )
+            )
+        ).otherwise(acc)
+    )
+)
+
+# Extract fields from the struct into top-level columns
+df_final_result = df_result.select(
+    "*",
+    col("metrics.Payment_tpi_clmTes_amt"),
+    col("metrics.Payment_tppd_clmTes_amt"),
+    col("metrics.Payment_tpu_clmTes_amt"),
+    col("metrics.Recovery_tpu_clmTes_amt"),
+    col("metrics.payment_rec_total"),
+    col("metrics.Recovery_rec_total"),
+    col("metrics.clmTes_P_and_R_rec_total")
+).withColumn("DEBUG_Recovery_tpu_clmTes_amt", col("metrics.Recovery_tpu_clmTes_amt")) \
+ .withColumn("DEBUG_Recovery_rec_total", col("metrics.Recovery_rec_total"))
