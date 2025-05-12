@@ -1,0 +1,41 @@
+df_exploded = df_final.withColumn(
+    "zipped", explode(arrays_zip("Est_Desc", "Est_Amt"))
+)
+
+
+df_filtered = df_exploded.filter(
+    (col("zipped.Est_Desc") != "") &
+    (col("zipped.Est_Amt") != 0) &
+    (col("zipped.Est_Amt").isNotNull())
+)
+
+
+from pyspark.sql import functions as F
+
+df_aggregated = df_filtered.groupBy("ID", "clmvtw").agg(
+    F.sum(
+        F.when((col("zipped.Est_Desc") == "TP INJURY") | (col("zipped.Est_Desc").startswith("RBA")), col("zipped.Est_Amt"))
+        .otherwise(0)
+    ).alias("Payment_tpi_clmTes_amt"),
+    
+    F.sum(
+        F.when(col("zipped.Est_Desc") == "TP PROP DG", col("zipped.Est_Amt"))
+        .otherwise(0)
+    ).alias("Payment_tppd_clmTes_amt"),
+    
+    F.sum(
+        F.when(col("zipped.Est_Desc").isNotNull(), col("zipped.Est_Amt"))
+        .otherwise(0)
+    ).alias("Payment_tpu_clmTes_amt"),
+
+    F.sum(
+        F.when(col("clmvtw") == "P", -col("zipped.Est_Amt"))
+        .otherwise(0)
+    ).alias("Recovery_tpu_clmTes_amt"),
+
+    F.sum(col("zipped.Est_Amt")).alias("payment_rec_total"),
+    F.sum(
+        F.when(col("clmvtw") == "P", col("zipped.Est_Amt"))
+        .otherwise(0)
+    ).alias("clmTes_P_and_R_rec_total")
+)
