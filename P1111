@@ -1,0 +1,142 @@
+Here is the complete PySpark equivalent of the SAS logic you provided. This translation assumes that your df DataFrame contains all necessary columns and uses PySpark DataFrame operations along with when, col, and withColumn. Adjustments may be needed based on actual column names and types.
+
+from pyspark.sql.functions import (
+    col, when, round as spark_round, lit, concat_ws, coalesce
+)
+
+# Start with base DataFrame
+df = df.withColumn("pre_apportioned_tppd_amt",
+                   when((col("if_3rd_party") == True) & (col("LAST_clmsqw") == True), col("Payment_tppd_clmTes_amt"))) \
+       .withColumn("pre_apportioned_tpi_amt",
+                   when((col("if_3rd_party") == True) & (col("LAST_clmsqw") == True), col("Payment_tpi_clmTes_amt")))
+
+# Handling negative payments
+df = df.withColumn("Payment_tpu_clmTes_amt",
+                   when((col("Payment_tppd_clmTes_amt") < 0),
+                        col("Payment_tpu_clmTes_amt") + col("Payment_tppd_clmTes_amt")) \
+                   .when((col("Payment_tpi_clmTes_amt") < 0),
+                         col("Payment_tpu_clmTes_amt") + col("Payment_tpi_clmTes_amt")) \
+                   .otherwise(col("Payment_tpu_clmTes_amt"))) \
+       .withColumn("Payment_tppd_clmTes_amt",
+                   when(col("Payment_tppd_clmTes_amt") < 0, lit(0)).otherwise(col("Payment_tppd_clmTes_amt"))) \
+       .withColumn("Payment_tpi_clmTes_amt",
+                   when(col("Payment_tpi_clmTes_amt") < 0, lit(0)).otherwise(col("Payment_tpi_clmTes_amt"))) \
+       .withColumn("Negative_tppd_est_dis_smoothed",
+                   when(col("Payment_tppd_clmTes_amt") < 0, lit(1))) \
+       .withColumn("Negative_tpi_est_dis_smoothed",
+                   when(col("Payment_tpi_clmTes_amt") < 0, lit(1)))
+
+# Rounding columns
+for col_name in ["Payment_tppd_clmTes_amt", "Payment_tpi_clmTes_amt", "Payment_tpu_clmTes_amt", "Recovery_tpu_clmTes_amt"]:
+    df = df.withColumn(col_name, spark_round(col(col_name), 2))
+
+# Begin apportioning logic
+cond_main = (col("Payment_tpu_clmTes_amt").isNotNull() & (col("Payment_tpu_clmTes_amt") != 0)) | \
+            (col("Recovery_tpu_clmTes_amt").isNotNull() & (col("Recovery_tpu_clmTes_amt") != 0))
+
+df = df.withColumn("tppd_perc",
+                   when(cond_main & (col("Payment_tppd_clmTes_amt") != 0) & (col("Payment_tpi_clmTes_amt") != 0),
+                        col("Payment_tppd_clmTes_amt") / (col("Payment_tppd_clmTes_amt") + col("Payment_tpi_clmTes_amt")))) \
+       .withColumn("tpi_perc",
+                   when(col("tppd_perc").isNotNull(), lit(1) - col("tppd_perc"))) \
+       .withColumn("put_in_both_buckets",
+                   when(col("tppd_perc").isNotNull(), lit(1))) \
+       .withColumn("put_all_in_tppd",
+                   when((col("Payment_tppd_clmTes_amt") != 0) & (col("Payment_tpi_clmTes_amt").isNull() | (col("Payment_tpi_clmTes_amt") == 0)), lit(1))) \
+       .withColumn("put_all_in_tpi",
+                   when((col("Payment_tpi_clmTes_amt") != 0) & (col("Payment_tppd_clmTes_amt").isNull() | (col("Payment_tppd_clmTes_amt") == 0)), lit(1)))
+
+# When both are zero or null
+df = df.withColumn("tpu_class_of_claim_bucket",
+                   when((col("Payment_tppd_clmTes_amt").isNull() | (col("Payment_tppd_clmTes_amt") == 0)) &
+                        (col("Payment_tpi_clmTes_amt").isNull() | (col("Payment_tpi_clmTes_amt") == 0)),
+                        col("clclmcd"))) \
+       .withColumn("put_all_in_tpi",
+                   when(col("tpu_class_of_claim_bucket").isin("prob", "02", "11", "?"), lit(1))) \
+       .withColumn("put_all_in_tppd",
+                   when(col("tpu_class_of_claim_bucket") == "tppd", lit(1))) \
+       .withColumn("put_in_both_buckets",
+                   when(col("tpu_class_of_claim_bucket") == "5050", lit(1))) \
+       .withColumn("tpi_perc", when(col("tpu_class_of_claim_bucket") == "5050", lit(0.5))) \
+       .withColumn("tppd_perc", when(col("tpu_class_of_claim_bucket") == "5050", lit(0.5))) \
+       .withColumn("TP_Break_based_on_Class_calced",
+                   when(col("tpu_class_of_claim_bucket").isNotNull(), lit(1)))
+
+# Note appending
+df = df.withColumn("note", concat_ws(",", coalesce(col("note"), lit("")),
+                                     when(col("put_in_both_buckets") == 1,
+                                          lit("TPU_Pay_Est_based_on_both_TPI_and_TPPD"))
+                                     .when(col("put_all_in_tppd") == 1,
+                                           lit("TPU_Pay_Est_split_based_on_TPPD_only"))
+                                     .when(col("put_all_in_tpi") == 1,
+                                           lit("TPU_Pay_Est_split_based_on_TPI_only"))
+                                     .when(col("TP_Break_based_on_Class_calced") == 1,
+                                           concat_ws("_", lit("TPU_Pay_Est_split_based_on_Class_of_Claim_of"), col("tpu_class_of_claim_bucket")))))
+
+# Old bucket
+df = df.withColumn("old_bucket", when(col("put_all_in_tpi") == 1, lit("was a tpu")))
+
+# Apply allocation logic
+df = df.withColumn("Payment_tpi_clmTes_amt",
+                   when(col("put_all_in_tpi") == 1 & col("Payment_tpu_clmTes_amt") != 0,
+                        col("Payment_tpi_clmTes_amt") + col("Payment_tpu_clmTes_amt"))
+                   .otherwise(col("Payment_tpi_clmTes_amt"))) \
+       .withColumn("Recovery_tpi_clmTes_amt",
+                   when(col("put_all_in_tpi") == 1 & (col("Payment_tpu_clmTes_amt") == 0),
+                        col("Recovery_tpi_clmTes_amt") + col("Recovery_tpu_clmTes_amt"))
+                   .otherwise(col("Recovery_tpi_clmTes_amt")))
+
+df = df.withColumn("Payment_tppd_clmTes_amt",
+                   when(col("put_all_in_tppd") == 1 & col("Payment_tpu_clmTes_amt") != 0,
+                        col("Payment_tppd_clmTes_amt") + col("Payment_tpu_clmTes_amt"))
+                   .otherwise(col("Payment_tppd_clmTes_amt")))
+
+df = df.withColumn("Recovery_tppd_clmTes_amt",
+                   when(col("put_all_in_tppd") == 1 & col("Recovery_tpu_clmTes_amt") != 0,
+                        col("Recovery_tppd_clmTes_amt") + col("Recovery_tpu_clmTes_amt"))
+                   .otherwise(col("Recovery_tppd_clmTes_amt")))
+
+# Split payment & recovery if needed
+df = df.withColumn("new_bit_P", spark_round(col("Payment_tpu_clmTes_amt") * col("tpi_perc"), 2)) \
+       .withColumn("new_bit_R", spark_round(col("Recovery_tpu_clmTes_amt") * col("tpi_perc"), 2))
+
+df = df.withColumn("Payment_tpi_clmTes_amt",
+                   when(col("put_in_both_buckets") == 1 & col("Payment_tpu_clmTes_amt") != 0,
+                        col("Payment_tpi_clmTes_amt") + col("new_bit_P"))
+                   .otherwise(col("Payment_tpi_clmTes_amt"))) \
+       .withColumn("Payment_tppd_clmTes_amt",
+                   when(col("put_in_both_buckets") == 1 & col("Payment_tpu_clmTes_amt") != 0,
+                        col("Payment_tppd_clmTes_amt") + (col("Payment_tpu_clmTes_amt") - col("new_bit_P")))
+                   .otherwise(col("Payment_tppd_clmTes_amt")))
+
+df = df.withColumn("Recovery_tpi_clmTes_amt",
+                   when(col("put_in_both_buckets") == 1 & col("Recovery_tpu_clmTes_amt") != 0,
+                        col("Recovery_tpi_clmTes_amt") + col("new_bit_R"))
+                   .otherwise(col("Recovery_tpi_clmTes_amt"))) \
+       .withColumn("Recovery_tppd_clmTes_amt",
+                   when(col("put_in_both_buckets") == 1 & col("Recovery_tpu_clmTes_amt") != 0,
+                        col("Recovery_tppd_clmTes_amt") + (col("Recovery_tpu_clmTes_amt") - col("new_bit_R")))
+                   .otherwise(col("Recovery_tppd_clmTes_amt")))
+
+# Set Rec_01_status
+df = df.withColumn("Rec_01_status",
+                   when(cond_main, lit("TPU apportioned")))
+
+# Totals and rounding
+df = df.withColumn("Post_apportion_total",
+                   col("Payment_tppd_clmTes_amt") + col("Payment_tpi_clmTes_amt") +
+                   col("Recovery_tppd_clmTes_amt") + col("Recovery_tpi_clmTes_amt")) \
+       .withColumn("clmTes_P_and_R_rec_total", spark_round(col("clmTes_P_and_R_rec_total"), 2)) \
+       .withColumn("Payment_rec_total", spark_round(col("Payment_rec_total"), 2)) \
+       .withColumn("Recovery_Rec_total", spark_round(col("clmTes_P_and_R_rec_total") - col("Payment_rec_total"), 2)) \
+       .withColumn("Payment_tpi_clmTes_amt", col("Payment_rec_total") - col("Payment_tppd_clmTes_amt")) \
+       .withColumn("Recovery_tpi_clmTes_amt", col("Recovery_Rec_total") - col("Recovery_tppd_clmTes_amt"))
+
+# Reset values for reuse
+for col_name in ["Recovery_rec_total", "Payment_rec_total", "clmTes_P_and_R_rec_total",
+                 "Payment_tppd_clmTes_amt", "Payment_tpi_clmTes_amt", "Payment_tpu_clmTes_amt",
+                 "Recovery_tppd_clmTes_amt", "Recovery_tpu_clmTes_amt", "defo_a_Pay_rec", "defo_a_Rec_rec"]:
+    df = df.withColumn(col_name, lit(0))
+
+Let me know if you’d like to output or write this result to a table or file, or if you need explanations for any part of the logic.
+
