@@ -1,0 +1,496 @@
+data LPMo_Dta.CL_clmTes_tpu_gone (keep = clmkyw thpsqW clclmcd pollow polriw polpmw clmsqw
+										tpu_class_of_claim_bucket
+										TP_Break_based_on_Class_calced
+										Payment_tpi_clmTes_amt
+										Payment_tppd_clmTes_amt Payment_tpu_clmTes_amt
+										Recovery_tpi_clmTes_amt
+										Recovery_tppd_clmTes_amt 
+										Recovery_tpu_clmTes_amt
+										payment_rec_total 
+										recovery_rec_total
+										clmTes_P_and_R_rec_total 
+										Post_apportion_total 
+										Rec_01_status
+										tpi_perc tppd_perc put_all_in_tppd 
+										put_all_in_tpi
+										put_in_both_buckets
+										new_bit_P 
+										new_bit_R 
+										old_bucket
+										note defo_a_Rec_rec defo_a_Pay_rec
+										Negative_tppd_est_dis_smoothed
+										Negative_tpi_est_dis_smoothed pre_apportioned_tppd_amt
+										Pre_apportioned_tpi_amt
+										Pay Reserve_General_Indemnity
+										Pay_Reserve_Special_Indemnity
+										Pay_Reserve_Costs
+										Pay_Reserve_Other
+										Al_ALAE_Payment_Reserve
+										Al_Indemnity_Payment_Reserve
+										Rec_Reserve_General_Indemnity
+
+
+								Rec_Reserve_Special_Indemnity 
+								Rec_Reserve_Costs
+								Rec_Reserve_Other
+
+								LPMo_Dta.CL_clmTes_CHK_desc_unknown(keep = clmkyw clclmcd pollow polriw polpmw clmsqw pay_d_grp
+raw_pay rec_d_grp)
+								_4101_debug_01;
+
+								set CL_EST_CLMTES_SORTED (keep = clmkyw thpsqw
+pollow polriw polpmw clmsqw clmvtw 
+
+Repaired_Tes_Amt_01-Repaired_Tes_Amt_10
+Repaired_ Tes_Desc_01-Repaired_Tes_Desc_10);
+by clmkyw thpsqw pollow polriw polpmw clmsqws;
+
+
+attrib note length=$160;
+
+retain TP_Break_based_on_Class_calced
+Recovery_rec_total  Payment_rec_total
+clmTes_P_and_R_rec_total
+
+Payment_tppd_clmTes_amt
+Payment_tpi_clmTes_amt  
+Payment_tpu_clmTes_amt
+Recovery_tppd_clmTes_amt  
+
+Recovery_tpi_clmTes_amt   
+Recovery_tpu_clmTes_amt 
+defo_a_Rec_rec
+defo_a_Pay_rec 
+
+
+Pay_Reserve_General_Indemnity
+Pay_Reserve_Special_Indemnity Pay_Reserve_Costs
+Pay_Reserve_Other
+
+Al_ALAE_Payment_Reserve
+
+Al_Indemnity_Payment_Reserve
+
+Rec_Reserve_General_Indemnity
+Rec_Reserve_Special_Indemnity Rec_Reserve_Costs
+Rec_Reserve_Other 
+
+_3rd_Party;
+
+array Est_Amt[*] Repaired_Tes_Amt_01-Repaired_Tes_Amt_10;
+
+arrayEst_Desc[*] $30 Repaired_Tes_Desc_01-Repaired_Tes_Desc_10;
+
+if FIRST.polpmw then do;
+if SUBSTR(polpmw,3,1) eq 'T’ then _3rd_Party = 1;
+
+else _3rd_Party = 0; -
+
+end;
+
+if FIRST.clmsqw then do;
+
+no_Pay_rec = 0;
+
+no_Rec_rec =0;
+Recovery_rec_total = 0;
+Payment_rec_total = 0;
+clmTes_P_and_R_rec_total=0;
+Payment_tppd_clmTes_amt =0;
+Payment_tpi_clmTes_amt =0;
+Payment_tpu_clmTes_amt =0;
+Recovery_tppd_clmTes_amt = 0;
+Recovery_tpi_clmTes_amt =0;
+Recovery_tpu_clmTes_amt =0;
+TP_Break_based_on_Class_calced =0;
+
+Negative_tppd_est_dis_smoothed = 0;
+
+Negative _tpi_est_dis_smoothed = 0;
+ 
+
+Pay_Reserve_General_Indemnity = 0;
+Pay_Reserve_Special_Indemnity = 0;
+Pay_Reserve_Costs  =0;
+
+Pay_Reserve_Other =0;
+
+Rec_Reserve_General_Indemnity = 0:
+Rec_Reserve_Special_Indemnity =0;
+Rec_Reserve_Costs =0;
+Rec_Reserve_Other =0;
+Al_ALAE_Payment_Reserve = 0;
+Al_Indemnity_Payment_Reserve = 0;
+
+end;
+
+if clmvtw='P’ then defo_a_Pay_rec=1;
+
+else if clmvtw='R' then defo_a_Rec_rec = 1;
+
+clclmed = put(clmkyw,_clctm.);
+format clclmcd $clclm.;
+
+If clmvtw = 'P' then do;
+do i=1 to 10;
+raw_pay = Est_Desc{i};
+
+pay_d_grp = put(Est_Desc{i}, $pay_D_grp.);
+if pay_d_grp = "General Indemnity" then do;
+Pay_Reserve_General_Indemnity + Est_Amt{i};end;
+
+else if pay_d_grp = "Special Indemnity" then do;
+Pay_Reserve_Special_Indemnity + Est_Amt{i};end;
+
+else if pay_d_grp = "Costs" then
+do; Pay_Reserve_Costs + Est_Amt{i};end;
+
+else if pay_d_grp = “Other” 
+then do; Pay_Reserve_Other + Est_Amt{i};end;
+
+else do;
+Pay_Reserve_Other + Est_Amt{i};
+
+if pay_d_grp = Est_Desc{i} and Est_Desc{i} ne '' then output LPMo_Dta.CL_clmTes_CHK_desc_unknown;
+
+end;
+
+pay_D_ALAE = put(Est_Desc{i}, $pay_D_ALAE.);
+if pay_D_ALAE = 'ALAE’
+then do;
+
+Al_ALAE_Payment_Reserve + Est_Amt(i);
+end;  
+else do;
+
+Al_Indemnity_Payment_Reserve +
+Est_Amt(i);
+
+end;  
+
+if NOT_3rd_Party then do;
+payment_rec_total + Est_Amt{i};
+clmTes_P_and_R_rec_total + Est_Amt{i};
+
+end;  
+end;
+end;
+
+If clmvtw = 'R' then do:
+do i = 1 to 10;
+
+Rec_d_grp = put(Est_Desc{i},$rec_d _grp.);
+
+if Rec_d_grp = "General Indemnity" then do;
+
+Rec_Reserve_General_Indemnity = 
+Rec_Reserve_General_Indemnity - Est_Amt{i};end;
+
+else if Rec_d_grp = "Special indemnity" then do;
+
+Rec_Reserve_Special_Indemnity =
+Rec_Reserve_Special_Indemnity - Est_Amit{i};end;
+
+else if Rec_d_grp = "Costs" then
+do; Rec_Reserve_Costs = Rec_Reserve_Costs - Est_Amt{i};end;
+
+else if Rec_d_grp = "Other"
+then do; Rec_Reserve_Other = Rec_Reserve_Other - Est_Amt{i};end;
+
+else do;
+
+Rec_Reserve_Other = Rec_Reserve_Other - Est_Amtt{i};
+
+if rec_d_grp = Est_Desc{i} and Est_Desc{i} ne then output LPMo_Dta.CL_clmTes_CHK_desc_unknown:
+
+end;
+
+
+if NOT _3rd_Party then do;
+
+Recovery_rec_total + (Est_Amt{i} * -1);
+clmTes_P_and_R_rec_total + (Est_Amt{i} * -1);
+
+end;
+
+end;
+
+end;
+if _3rd_Party then do;
+do i=1 to 10; /* For each of the 10 estimate fields */
+
+if Est_Desc{i} ne '' and Est_Amt {i} not in (0,.) then
+do; 
+
+
+if clmvtw = 'P' then do:
+
+if ( Est_Desc{i} in (‘TP INJURY') or
+substr(Est_Desc{i}, 1,3) = 'RBA') then do;
+Payment_tpi_clmTes_amt +
+Est_Amt{i}; end;
+else if Est_Desc{i} eq 'TP PROP DG' then
+do; Payment_tppd_clmTes_amt + Est_Amt{i}; end;
+
+else do; Payment_tpu_clmTes_amt +
+Est_Amt{i}; end;
+
+payment_rec_total + Est_Amt{i};
+
+clmTes_P_and_R_rec_total +
+Est_Ami{i};
+end;
+else do;  
+Recovery_tpu_clmTes_amt + Est_Amt{i}*-1;
+
+Recovery_rec_total + (Est_Amt{i} * -1 )
+
+clmTes_P_and_R_rec_total +
+(Est_Amt{i} * -1);
+
+DEBUG_Recovery_tpu_clmTes_amt = 
+Recovery_tpu_clmTes_amt:
+
+DEBUG_Recovery_rec_total = 
+Recovery_rec_total;
+
+end;
+
+end;
+
+end;  
+end;  
+
+if NOT _3rd_party and LAST.clmsqw then do;
+
+clmTes_P_and_R_rec_total =
+round(clmTes_P_and_R_rec_total,.01);
+
+
+Payment_rec_total =
+round(Payment_rec_total,.01);
+
+Recovery_Rec_total =
+round(clmTes_P_and_R_rec_total - Payment_rec_total,.01);
+
+output LPMo_Dta.CL_clmTes_tpu_gone;
+
+end;
+
+if_3rd_party and LAST.clmsqw then do;
+
+pre_apportioned_tppd_amt =
+Payment_tppd_clmTes_amt;
+
+pre_apportioned_tpi_amt =
+Payment_tpi_clmTes_amt;
+
+if Payment_tppd_clmTes_amt lt 0 then do:
+
+Payment_tpu_clmTes_amt +
+Payment_tppd_clmTes_amt;
+
+Payment_tppd_clmTes_amt = 0;
+Negative_tppd_est_dis_smoothed = 1;
+end; 
+else if Payment_tpi_clmTes_amt lt 0 then do;
+
+Payment_tpu_clmTes_amt +
+Payment_tpi_clmTes_amt;
+
+Payment_tpi_clmTes_amt= 0;
+
+Negative_tpi_est_dis_smoothed = 1;
+
+end;
+
+Payment_tppd_clmTes_a mt =
+round(Payment_tppd_clmtTes_a mt,.01);
+
+Payment_tpi_clmTes_amt =
+round(Paym ent_tpi_clmTes_amt,.01);
+
+Payment_tpu_clmTes_amt =
+round(Payment_tpu_clmTes_amt,.01 );
+
+Recovery_tpu_clmTes_amt =
+round(Recovery_tpu_clmTes_amt,.01 );
+
+if Payment_tpu_clmTes_amt not in (0,.) or
+Recovery_tpu_clmTes_amt not in (0,.) then do; 
+
+if Payment_tppd_clmTes_amt not in (0,.) and
+Payment_tpi_clmTes_amt not in (0,.) then do;
+
+tppd_perc =
+Payment_tppd_clmTes_amt / (Payment_tppd_clmTes_amt +
+Payment_tpi_clmTes_amt)
+
+
+DEBUG_diff = payment_rec_total -
+Payment_tppd_clmTes_amt;  
+
+tpi_perc = 1 - tppd_perc;
+put_in_both_buckets = 1;
+
+note = compress(note!!',TPU_Pay_Est_based_on_both_TPl_and_TPPD,');
+end;
+
+
+else if Payment_tppd_clmTes_amt not in (0,.)
+and Payment_tpi_clmTes_amt in (0,.) then do;
+
+put_all_in_tppd = 1;
+
+note = compress(note!!',tPU_Pay_Est_s plit_based_on_TPP D_only,’);
+
+end; 
+else if Payment_tpi_clmTes_amt not in (0,.) and Payment_tppd_clmTes_amtin
+(0,.) then do; 
+put_all_in_tpi = 1; 
+note = compress(note!!',TPU_Pay_Est_split_based_on_TPI_only,’); end; 
+else if
+Payment_tppd_clmTes_amt in (0,.) AND Payment_tpi_clmTes_amt in (0,.) then do:
+tpu_class_of_claim_bucket   = put(clclmcd,$cl_buck.); 
+if tpu_class_of_claim_bucket eq 'tpi' then put_all_in_tpi = 1; 
+else if tpu_class_of_claim_bucket eq ‘tppd' then put_all_in_tppd = 1; 
+else if tpu_class_of_claim_bucket eg '5050' then do; tpi_perc = .50; tppd_perc = .50; put_in_both_buckets = 1;  
+
+
+end;
+
+else if tpu_class_of_claim_bucket eq
+‘prob'  
+
+or clclmcd in ('02''11''?')
+
+or tpu_class_of_claim_bucket not in
+(‘tpi','tppd’) then do;
+
+put_all_in_tpi = 1;
+end;
+TP_Break_based_on_Class_calced = 1:
+
+note = compress(note!!',TPU_Pay_Est_split_based_on_Class_of_Claim_of_'!!tpu_class_of
+_Claim_bucket!!',');
+
+end; 
+
+old_bucket = 'was a tpu’;
+if put_all_in_tpi then do;
+
+if Payment_tpu_clmTes_amt not in (0,.)
+
+then do; 
+ Payment_tpi_clmTes_amt +
+payment_tpu_clmTes_amt; 
+end;
+else do;
+Recovery_tpi_clmTes_amt +
+
+recovery_tpu_clmTes_amt;
+
+end;
+end; 
+else if put_all_in_tppd then do;
+
+if Payment_tpu_clmTes_amt not in (0,.)
+then do;
+
+Payment_tppd_clmTes_amt +
+payment_tpu_clmTes_amt;
+
+end;
+
+if Recovery_tpu_clmTes_amt not in (0,.)
+then do;
+
+DEBUG_did_u_get_here = 1:
+
+Recovery_tppd_clmTes_amt +
+recovery_tpu_clmTes_amt;
+
+end;
+end; /* End of if put_all_in_tppd */
+else if put_in_both_buckets then do; 
+
+if Payment_tpu_clmTes_amt not in (0,.)
+then do;
+
+new_bit_P  =
+round((Payment_tpu_clmTes_amt * tpi_perc),.01);
+
+Payment_tpi_clmTes_amt +
+new_bit_P;
+
+Payment_tppd_clmTes_amt +
+(Payment_tpu_clmTes_amt - new_bit_P);
+
+end;
+
+
+else if Recovery_tpu_clmTes_amt not in
+(0,.) then do;
+
+new_bit_R =
+round((Recovery_tpu_clmTes_amt * tpi_perc),.01);
+
+Recovery_tpi_clmTes_amt +
+new_bit_R;
+
+Recovery_tppd_clmTes_amt +
+(Recovery_tpu_clmTes_amt - new_bit_R);
+
+end;
+end; 
+end;  
+
+if Payment_tpu_clmTes_amt not in (0,.) or
+Recovery_tpu_clmTes_amt not in (0,.) then Rec_01_ status ='TPU
+apportioned';
+
+Post_apportion_total = Payment_tpi_clmTes_amt
++ Payment_tppd_clmTes_amt +
+
+Recovery_tpi_clmTes_amt + Recovery_tppd_clmTes_amt;
+
+clmTes_P_and_R_rec_total =
+round(clmTes_P_and_R_rec_total,.01);
+
+Payment_rec_total =
+round(Payment_rec_total,.01);
+
+Recovery_Rec_total = round(clmTes_P_and_R_rec_total - Payment_rec_total,.01);
+
+
+
+Payment_tppd_clmTes_amt = round(Payment_tppd_clmTes_amt,.01);
+
+Payment_tpi_clmTes_amt = Payment_rec_total - Payment_tppd_clmTes_amt;
+
+Recovery_tppd_clmTes_amt = round(Recovery_tppd_clmTes_amt,.01);
+
+Recovery_tpi_clmTes_amt = Recovery_rec_total - Recovery_tppd_clmTes_amt;
+
+output LPMo_Dta.CL_clmTes_tpu_gone:
+
+Recovery_rec_total = 0;
+Payment_rec_total =0;
+clmTes_P_and_R_rec_total=0;
+Payment_tppd_clmTes_amt =0;
+Payment_tpi_clmTes_amt =0;
+Payment_tpu_clmTes_amt =0;
+Recovery_tppd_clmTes_amt =0;
+
+
+Recovery_tpu_clmTes_amt = 0;
+defo_a_Pay_rec=0;
+
+defo_a_Rec_rec =0;
+
+end;
+
+format_numeric_ 15.2;
+run;
+
+Recovery_tpi_clmTes_amt =0;
